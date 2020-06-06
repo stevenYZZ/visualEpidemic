@@ -1,7 +1,7 @@
-﻿Build started 2020/6/6 19:35:22.
+﻿Build started 2020/6/6 19:59:13.
      1>Project "E:\gitVisual\visualEpidemic\visualEpidemic\visualEpidemic\visualEpidemic.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
-         Touching "Debug\visualEpidemic.unsuccessfulbuild".
+         Creating "Debug\visualEpidemic.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          D:\ProgramFiles\VC\bin\CL.exe /c /I../libgraphics /I../simpleGUI /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _CRT_SECURE_NO_WARNINGS /D _CRT_NONSTDC_NO_DEPRECATE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt source\visualization.c
          visualization.c
@@ -38,4 +38,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.79
+Time Elapsed 00:00:00.74

@@ -320,22 +320,16 @@ void printDateX(double sx, double sy, double dx, double dy,int dateNumber){
 
 	SetPenColor("Black");
 	//第一个点的横坐标日期
-	//转换为竖排
 	k=0;
 	while(temp->date[k]!='\0'){
 		dateChange[k][0]=temp->date[k];
 		dateChange[k][1]='\0';
-		k++;
-	}
-	dateChange[k][0]='\0';
-	//print竖排
-	k=0;
-	while(dateChange[k][0]!='\0'){
 		drawLabel(sx, coordinateLabelY-k*fontA,dateChange[k]);
 		k++;
 	}
-
+	dateChange[k][0]='\0';
 	temp=temp->next;
+	//后面点的横坐标日期
 	for(j=1;j<dateNumber;j++){
 		//横坐标
 		//转换
@@ -343,15 +337,10 @@ void printDateX(double sx, double sy, double dx, double dy,int dateNumber){
 		while(temp->date[k]!='\0'){
 			dateChange[k][0]=temp->date[k];
 			dateChange[k][1]='\0';
-			k++;
-		}
-		dateChange[k][0]='\0';
-		//print竖排
-		k=0;
-		while(dateChange[k][0]!='\0'){
 			drawLabel(sx+dx*j, coordinateLabelY-k*fontA,dateChange[k]);
 			k++;
 		}
+		dateChange[k][0]='\0';
 	}
 }
 

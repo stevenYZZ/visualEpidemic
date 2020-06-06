@@ -1,4 +1,4 @@
-﻿Build started 2020/6/6 19:59:13.
+﻿Build started 2020/6/6 20:58:53.
      1>Project "E:\gitVisual\visualEpidemic\visualEpidemic\visualEpidemic\visualEpidemic.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\visualEpidemic.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -38,4 +38,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.74
+Time Elapsed 00:00:00.73

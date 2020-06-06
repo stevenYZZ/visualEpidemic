@@ -73,6 +73,7 @@ void drawPic(){
 	sx=coordinateWidth*0.05+coordinateX;
 	sy=coordinateHeight*0.05+coordinateY;
 	drawYLine(sy,dy,peopleMax,peopleMin,peopleDelta);
+	//printDateX(sx,sy,dx,dy,dateNumber);
 
 	//折线绘制
 	for(i=0;i<n;i++){
@@ -305,24 +306,91 @@ void peopleLabel(RECORD *temp, double dx, double labelX, double labelY, int peop
 }
 
 
-//折线+横坐标日期+人数标明
+
+//void printDateX(double sx, double sy, double dx, double dy,int dateNumber){
+//	RECORD *temp=NULL;
+//	double coordinateLabelY;
+//	char dateChange[10][2];
+//	int j,k;
+//	double fontA;
+//	fontA = GetFontAscent();
+//
+//	temp=rpHeadZoom;
+//	coordinateLabelY = coordinateY-coordinateHeight*0.05;
+//	SetPenColor("Black");
+//	
+//	//第一个点的横坐标日期
+//	//转换为竖排
+//	k=0;
+//	while(temp->date[k]!='\0'){
+//		dateChange[k][0]=temp->date[k];
+//		dateChange[k][1]='\0';
+//		k++;
+//	}
+//	dateChange[k][0]='\0';
+//	//print竖排
+//	k=0;
+//	while(dateChange[k][0]!='\0'){
+//		drawLabel(sx, coordinateLabelY-k*fontA,dateChange[k]);
+//		k++;
+//	}
+//
+//	temp=temp->next;
+//	for(j=1;j<dateNumber;j++){
+//
+//	//横坐标
+//	//转换
+//	k=0;
+//	while(temp->date[k]!='\0'){
+//		dateChange[k][0]=temp->date[k];
+//		dateChange[k][1]='\0';
+//		k++;
+//	}
+//	dateChange[k][0]='\0';
+//	//print竖排
+//	k=0;
+//	while(dateChange[k][0]!='\0'){
+//		drawLabel(sx+dx*j, coordinateLabelY-k*fontA,dateChange[k]);
+//		k++;
+//	}
+//
+//}
+
+//折线+人数标明
 //参数rpHeadZoom起始日期对应结构地址，rpTailZoom结束日期对应结构地址,
 //sx,sy起笔点坐标，与轴有距离; dx,dy每个点横纵坐标变化标准间隔
 //i现在哪条线
 void drawFoldLine(double sx, double sy, double dx, double dy, int peopleMin, int peopleMax,int dateNumber, int i){
-	RECORD *temp;
+	RECORD *temp=NULL;
 	double nowPointY, lastPointY;//当前点基准线以上delta值，上一个点基准线以上delta值
-	double coordinateLabelY;
 	int j=0,k=0;
+	double coordinateLabelY;
+	char dateChange[10][2];
+	double fontA;
+	fontA = GetFontAscent();
 	//double r=dx*0.05;//重点记号圈大小
-	//double fontA=GetFontAscent();
+	coordinateLabelY = coordinateY-coordinateHeight*0.05;
 
 	temp=rpHeadZoom;
-	coordinateLabelY = coordinateY-coordinateHeight*0.05;
 	nowPointY=(temp->number[i]-peopleMin)*dy;//基准线以上delta
-
 	SetPenColor("Blue");
-	drawLabel(sx, coordinateLabelY, temp->date);//第一个点的横坐标日期
+	//第一个点的横坐标日期
+	//转换为竖排
+	k=0;
+	while(temp->date[k]!='\0'){
+		dateChange[k][0]=temp->date[k];
+		dateChange[k][1]='\0';
+		k++;
+	}
+	dateChange[k][0]='\0';
+	//print竖排
+	k=0;
+	while(dateChange[k][0]!='\0'){
+		drawLabel(sx, coordinateLabelY-k*fontA,dateChange[k]);
+		k++;
+	}
+
+	//drawLabel(sx, coordinateLabelY, temp->date);//横排版本第一个点的横坐标日期
 	
 	lastPointY=nowPointY;
 
@@ -337,10 +405,26 @@ void drawFoldLine(double sx, double sy, double dx, double dy, int peopleMin, int
 		DrawLine(dx,nowPointY-lastPointY);
 		lastPointY=nowPointY;
 
-		//日期横坐标打印
-		for(k=0;k<=7;k++){//日期打印8位,横排，首数字与点对齐
-			drawLabel(sx+dx*j, coordinateLabelY, temp->date);
+		//横坐标
+		//转换
+		k=0;
+		while(temp->date[k]!='\0'){
+			dateChange[k][0]=temp->date[k];
+			dateChange[k][1]='\0';
+			k++;
 		}
+		dateChange[k][0]='\0';
+		//print竖排
+		k=0;
+		while(dateChange[k][0]!='\0'){
+			drawLabel(sx+dx*j, coordinateLabelY-k*fontA,dateChange[k]);
+			k++;
+		}
+		////日期横坐标打印
+		//for(k=0;k<=7;k++){//日期打印8位,横排，首数字与点对齐
+		//	drawLabel(sx+dx*j, coordinateLabelY, temp->date);
+		//}
+
 		//人数标注
 		peopleLabel(temp,dx, sx+dx*j, sy+nowPointY, peopleMin, peopleMax,i);
 		//下一个点

@@ -30,6 +30,7 @@ void seperate(RECORD *rp);
 void buttonLeftest();
 void buttonRight();
 void buttonCustomize(int day1,int month1,int year1,int day2,int month2, int year2,int upper, int lower);
+void printDateX(double sx, double sy, double dx, double dy,int dateNumber);
 
 //Buttonº¯Êý
 //Button»æÖÆº¯Êý

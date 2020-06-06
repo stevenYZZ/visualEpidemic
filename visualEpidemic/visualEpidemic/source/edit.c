@@ -21,10 +21,17 @@
 
 //本程序自带头文件
 #include "common.h"
-
+#include "visualization.h"
 //全局变量
 
+//杂七杂八函数
+void empty(){
+	;
+}
 
+void err(){
+	exit(-1);
+}
 
 //以下函数按button顺序排列
 //编辑模式On/Off函数
@@ -34,16 +41,31 @@ void editOnOff(){
 }
 
 //新建日期函数
-void editNewDate();
+void editNewDate(){
+	if(globalEdit)err();
+	else empty();
+}
 
 //删除最后日期函数
-void editDeleteLastDate();
+void editDeleteLastDate(){
+	if(globalEdit)err();
+	else empty();
+}
 
 //修改参数函数
-void editChangeData();
+void editChangeData(){
+	if(globalEdit)err();
+	else empty();
+}
 
 //新增线函数
-void editNewLine();
+void editNewLine(){
+	if(globalEdit)err();
+	else empty();
+}
 
 //删除线函数
-void editDeleteLine();
+void editDeleteLine(){
+	if(globalEdit)err();
+	else empty();
+}

@@ -32,6 +32,9 @@
 //全局变量
 int globalEdit = 0; 
 
+
+
+
 //本文件所用杂七杂八函数
 
 
@@ -47,6 +50,8 @@ void commonTF(int *a){
 	else *a=0;
 
 }
+
+
 
 
 

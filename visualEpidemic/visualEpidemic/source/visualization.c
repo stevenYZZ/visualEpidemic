@@ -34,13 +34,11 @@
 double winWidth, winHeight;   // 窗口尺寸
 double coordinateX,coordinateY;  //坐标系的左下角点
 double coordinateWidth, coordinateHeight;  //坐标系的x/y轴长度，带drawArea();里确定
+
 RECORD *rp=NULL, *rpHeadZoom=NULL,*rpTailZoom=NULL;
 KEY *kp=NULL;
 
-//实验函数
-void err(){
-	exit(-1);
-}
+
 
 //界面刷新
 //所有button前端也要复制到这个函数里面
@@ -487,6 +485,9 @@ void addEditButton(int a,int b,void(*p)(),char *str){     //button位置（a,b）a列
 	double sw = w/editScaleX;						//编辑区button左右间隔
 	editW=0.75*winWidth;
 	w= editW/(a0*(1+1/editScaleX));
+
+	if(globalEdit==0)SetPenColor("Gray");
+
 	if (button(GenUIID(a*10+b), editX+(a-1)*w+(a-1)*sw, editY+b*h+(b-1)*sh, w, h, str))
 		p();//此处填写函数
 }
@@ -515,13 +516,13 @@ void drawButtons(){
 	addViewButton(2,1,buttonZoomOut,"缩小");
 	addViewButton(3,1,err,"适应屏幕");
 	addViewButton(4,1,err,"备用");
-	addViewButton(1,2,err,"左移到头");
-	addViewButton(2,2,err,"左移");
-	addViewButton(3,2,err,"右移");
-	addViewButton(4,2,err,"右移到头");
+	addViewButton(1,2,buttonLeftest,"左移到头");
+	addViewButton(2,2,buttonLeft,"左移");
+	addViewButton(3,2,buttonRight,"右移");
+	addViewButton(4,2,buttonRightest,"右移到头");
 	addEditButton(1,5,editOnOff,"编辑模式");
-	addEditButton(1,4,err,"新建日期");
-	addEditButton(1,3,err,"删除最后日期");
+	addEditButton(1,4,editNewDate,"新建日期");
+	addEditButton(1,3,editDeleteLastDate,"删除最后日期");
 	addEditButton(1,2,err,"预测");
 	addEditButton(1,1,err,"更改预测模式");
 	

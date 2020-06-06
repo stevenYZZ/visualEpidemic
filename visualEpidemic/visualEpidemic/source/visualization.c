@@ -34,6 +34,9 @@
 double winWidth, winHeight;   // 窗口尺寸
 double coordinateX,coordinateY;  //坐标系的左下角点
 double coordinateWidth, coordinateHeight;  //坐标系的x/y轴长度，带drawArea();里确定
+double highLight[10][3];  //是否高亮，[][0]x坐标，[][1]y坐标，[][2]是否高亮
+double highLightBoxdx; //判断高亮要用到box的宽
+
 RECORD *rp=NULL, *rpHeadZoom=NULL,*rpTailZoom=NULL;
 KEY *kp=NULL;
 
@@ -163,72 +166,6 @@ int getKeyNumber(KEY *p){
 }
 
 
-//判断是否继续放大
-int judgeZoomIn(){
-	int count=0;
-	RECORD *temp=NULL;
-	temp=rpHeadZoom;
-	while(temp->next != rpTailZoom){
-		count++;
-		temp=temp->next;
-		if(count>2){
-			break;
-		}
-	}
-	if (count <= 1){  //仅剩<=3个数据
-		return 0;
-	}
-	else{  //剩余>=4个数据
-		return 1;
-	}
-}
-
-//放大调用
-void buttonZoomIn(){
-	if(judgeZoomIn()){//放大则头尾相反
-		rpHeadZoom=rpHeadZoom->next;
-		rpTailZoom=rpTailZoom->prior;
-	}
-	else{
-		return;
-	}
-}
-
-
-
-//缩小调用
-void buttonZoomOut(){
-	RECORD *temp;
-	if(rpHeadZoom->prior == NULL && rpTailZoom->next == NULL){//没有缩小余地，两端都到头
-		return;
-	}
-	if(rpHeadZoom->prior!=NULL&&rpTailZoom->next!=NULL){//两端都没到头
-		rpHeadZoom=rpHeadZoom->prior;
-		rpTailZoom=rpTailZoom->next;
-	}
-	else if(rpHeadZoom->prior==NULL){//首到头，判断尾部
-		temp=rpTailZoom->next;
-		if(temp->next !=NULL){//尾端可以缩两个
-			rpTailZoom=temp->next;
-			return;
-		}
-		else{//尾端缩一个
-			rpTailZoom=temp;
-			return;
-		}
-	}//else if
-	else if(rpTailZoom->next == NULL){
-		temp=rpHeadZoom->prior;
-		if(temp->prior!=NULL){//头部可以缩两个
-			rpHeadZoom=temp->prior;
-			return;
-		}
-		else{//头部缩一个
-			rpHeadZoom=temp;
-			return;
-		}
-	}//else if
-}
 
 //得dateNumber总天数和总的头尾地址
 void getOriginalDateHeadTail(RECORD *rp,RECORD *rpHeadZoom, RECORD *rpTailZoom){
@@ -285,25 +222,6 @@ int getTotalPeopleNumber(RECORD *rp,int n,int *peopleMax, int *peopleMin){
 }
 
 
-///人数标注,peopleMin/peopleMax加画圈圈
-void peopleLabel(RECORD *temp, double dx, double labelX, double labelY, int peopleMin, int peopleMax, int i){
-	char num[10];
-	double r=dx*0.05;//重点记号圈大小
-	double fontA=GetFontAscent();//label的高度，控制y坐标用
-	
-	SetPenColor("Black");
-
-	drawLabel(labelX,labelY,itoa(temp->number[i],num,10));
-	//最大最小给加画圈圈
-	if(temp->number[i]==peopleMin||temp->number[i]==peopleMax){
-		MovePen(labelX+r,labelY);
-		SetPenColor("Red");
-		DrawArc(r,0,360);
-	}
-	SetPenColor("Blue");
-
-
-}
 
 
 //日期横坐标  竖版排列print函数
@@ -356,7 +274,19 @@ void drawFoldLine(double sx, double sy, double dx, double dy, int peopleMin, int
 
 	temp=rpHeadZoom;
 	nowPointY=(temp->number[i]-peopleMin)*dy;//基准线以上delta
-	SetPenColor("Blue");
+
+	//判断高亮/不高亮  笔触颜色
+	//颜色改变记得去peopleLabel函数也改掉
+	if(highLight[i][2]==0){
+		SetPenColor("Blue");
+	}
+	else if(highLight[i][2]==1){
+		SetPenColor("Red");
+	}
+	else{//报错红色
+		SetPenColor("Yellow");
+	}
+	
 
 	//drawLabel(sx, coordinateLabelY, temp->date);//横排版本第一个点的横坐标日期
 	
@@ -383,10 +313,165 @@ void drawFoldLine(double sx, double sy, double dx, double dy, int peopleMin, int
 		//下一个点
 		temp=temp->next;
 	}
-
+	lineName(sx+dx*(j-0.75), sy+nowPointY,dx,i);
 
 }
 
+//判断是否继续放大
+int judgeZoomIn(){
+	int count=0;
+	RECORD *temp=NULL;
+	temp=rpHeadZoom;
+	while(temp->next != rpTailZoom){
+		count++;
+		temp=temp->next;
+		if(count>2){
+			break;
+		}
+	}
+	if (count <= 1){  //仅剩<=3个数据
+		return 0;
+	}
+	else{  //剩余>=4个数据
+		return 1;
+	}
+}
+
+
+
+//人数标注,peopleMin/peopleMax加画圈圈
+void peopleLabel(RECORD *temp, double dx, double labelX, double labelY, int peopleMin, int peopleMax, int i){
+	char num[10];
+	double r=dx*0.05;//重点记号圈大小
+	double fontA=GetFontAscent();//label的高度，控制y坐标用
+	
+	SetPenColor("Black");
+
+	drawLabel(labelX,labelY,itoa(temp->number[i],num,10));
+	//最大最小给加画圈圈
+	if(temp->number[i]==peopleMin||temp->number[i]==peopleMax){
+		MovePen(labelX+r,labelY);
+		SetPenColor("Red");
+		DrawArc(r,0,360);
+	}
+	//判断高亮/不高亮  笔触颜色
+	if(highLight[i][2]==0){
+		SetPenColor("Blue");
+	}
+	else if(highLight[i][2]==1){
+		SetPenColor("Red");
+	}
+	else{//报错红色
+		SetPenColor("Cyan");
+	}
+}
+
+//图例标注哪条线
+//(px, py)是当前线的最后一个点坐标（横有调整，dx控制box宽度，i是第几条线
+void lineName(double px,double py,double dx, int i){
+	double nx,ny;
+	double fontA;
+	int k;
+	KEY *temp;
+	fontA=GetFontAscent();
+	nx=px;
+	ny=py-fontA/2;
+	temp=kp;
+
+	//确定对应的KEY
+	for(k=0;k<i;k++){
+		temp=temp->next;
+	}
+	SetPenColor("Light Gray");
+	drawBox(nx, ny, dx, fontA, 1,temp->name, 'c', "Black");
+	highLightBoxdx=dx;
+
+	//drawLabel(nx,ny,temp->name);
+	//更新highLight
+	highLight[i][0]=nx;
+	highLight[i][1]=ny;
+}
+
+//mouseEvent里判断鼠标是否点击box区域，需要高亮
+void judgeHighLight(double mx,double my){
+	int i,n;
+	double fontA;
+
+	fontA=GetFontAscent();
+	n = getKeyNumber(kp);
+
+	for(i=0;i<n;i++){
+		if(mx>=highLight[i][0] && mx<=(highLight[i][0]+highLightBoxdx)){
+			if(my>=highLight[i][1] && my<=highLight[i][1]+fontA){
+				updateHighLight(i,n);
+				break;
+			}
+		}
+	}
+	
+}
+
+//i新高亮线，n线总数
+//更新高亮，包括清楚之前高亮和添加最新高亮
+void updateHighLight(int i,int n){
+	int j;
+	for(j=0;j<n;j++){
+		if(j!=i){
+			highLight[j][2]=0;
+		}
+		else{
+			highLight[i][2]=1;
+		}
+	}
+}
+
+
+//放大调用
+void buttonZoomIn(){
+	if(judgeZoomIn()){//放大则头尾相反
+		rpHeadZoom=rpHeadZoom->next;
+		rpTailZoom=rpTailZoom->prior;
+	}
+	else{
+		return;
+	}
+}
+
+
+
+//缩小调用
+void buttonZoomOut(){
+	RECORD *temp;
+	if(rpHeadZoom->prior == NULL && rpTailZoom->next == NULL){//没有缩小余地，两端都到头
+		return;
+	}
+	if(rpHeadZoom->prior!=NULL&&rpTailZoom->next!=NULL){//两端都没到头
+		rpHeadZoom=rpHeadZoom->prior;
+		rpTailZoom=rpTailZoom->next;
+	}
+	else if(rpHeadZoom->prior==NULL){//首到头，判断尾部
+		temp=rpTailZoom->next;
+		if(temp->next !=NULL){//尾端可以缩两个
+			rpTailZoom=temp->next;
+			return;
+		}
+		else{//尾端缩一个
+			rpTailZoom=temp;
+			return;
+		}
+	}//else if
+	else if(rpTailZoom->next == NULL){
+		temp=rpHeadZoom->prior;
+		if(temp->prior!=NULL){//头部可以缩两个
+			rpHeadZoom=temp->prior;
+			return;
+		}
+		else{//头部缩一个
+			rpHeadZoom=temp;
+			return;
+		}
+	}//else if
+}
 //预测链表与原链表的连接
 void connnect(RECORD *rp, RECORD *futurep){
 	rp->next=futurep;

@@ -55,10 +55,26 @@ void winchange(){
 //链表模块
 
 void MouseEventProcess(int x, int y, int button, int event)
-{
+{	
+	double mx, my;
+	static double omx=0,omy=0;
+	
+ 	mx = ScaleXInches(x);/*pixels --> inches*/
+ 	my = ScaleYInches(y);/*pixels --> inches*/
+
+	
+	switch(event){
+		case BUTTON_UP:
+			omx=mx;
+			omy=my;
+			judgeHighLight(omx,omy);
+			break;
+	}
 	uiGetMouse(x,y,button,event); //GUI获取鼠标
 	display(); // 刷新显示
 }
+
+
 
 void Main() 
 {
@@ -109,6 +125,7 @@ void Main()
 	kpTail=kpTail->next;
 	//录入结束
 
+	
 
 
 	//可视化模块开始
@@ -122,11 +139,20 @@ void Main()
 	//dateTail original
 	n = getKeyNumber(kp);
 	temp=rp;
+
+	//初始化高亮设置,状态全为不高亮
+	for(i=0;i<n;i++){
+		highLight[i][0]=-1;//x定位不可能为负数
+		highLight[i][2]=0;
+	}
+
 	if (n != 0){
 		getOriginalDateHeadTail(rp,rpHeadZoom,rpTailZoom);
 	}
 
-	
+	//一开始没有display();的话，运行后鼠标不划到界面内就没有显示
+	display();
+
 	registerMouseEvent(MouseEventProcess);      // 鼠标
 //########################################################################################################
 

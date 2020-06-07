@@ -34,7 +34,7 @@
 double winWidth, winHeight;   // 窗口尺寸
 double coordinateX,coordinateY;  //坐标系的左下角点
 double coordinateWidth, coordinateHeight;  //坐标系的x/y轴长度，带drawArea();里确定
-double highLight[10][3];  //是否高亮，[][0]x坐标，[][1]y坐标，[][2]是否高亮
+double highLight[10][4];  //是否高亮，[][0]x坐标，[][1]y坐标，[][2]是否高亮，[][4]位置序号（越小越下面）
 double highLightBoxdx; //判断高亮要用到box的宽
 
 RECORD *rp=NULL, *rpHeadZoom=NULL,*rpTailZoom=NULL;
@@ -78,12 +78,78 @@ void drawPic(){
 	drawYLine(sy,dy,peopleMax,peopleMin,peopleDelta);
 	printDateX(sx,sy,dx,dy,dateNumber);
 
+	highLightBoxdx=dx;
+
 	//折线绘制
 	for(i=0;i<n;i++){
 		drawFoldLine(sx,sy,dx,dy,peopleMin,peopleMax,dateNumber,i);  
 	}
+	//标注线名字
+	sortLineName(n);
+	adjustLineName(n);
+	for(i=0;i<n;i++){
+		highLight[i][0]=sx+dx*(dateNumber-0.75);//暴力改bug可能治标不治本
+		lineName(highLight[i][0],highLight[i][1],dx,i);
+	}
+}
+
+//排序标号tag的位置，避免重合
+//调整highLight[][4],序号越小越下面(0-6)
+//n总共线数量
+//#############################################################bug-更改highLight[1][0]开始改值
+void sortLineName(int n){
+	int i,j,num111;
+	double test1,ts2;
+	/*test1=highLight[1][0];
+	ts2=highLight[2][0];*/
+	for(i=0;i<n;i++){
+		num111=0;
+		for(j=0;j<n;j++){
+			if(i!=j && highLight[i][1]>=highLight[j][1]){
+				num111++;
+			}//if
+		}//for j
+		highLight[i][4]=num111;
+	}//for i
 	
 }
+
+int findSort(int n,int i){
+	int j;
+	for(j=0;j<n;j++){
+		if(highLight[j][4]==i){
+			break;
+		}
+	}
+	return j;
+}
+
+void adjustLineName(int n){
+	int i,mid,findn,middler;
+	double fontA;
+	fontA=GetFontAscent();
+	mid=n/2;//固定位置的线作为基准，调上下;e.g.共7条，中位线是0-n中的3，即第四条
+
+	middler=findSort(n,mid);
+	for(i=(mid+1);i<n;i++){
+		findn=findSort(n,i);
+		if(highLight[findn][1]<(highLight[middler][1]+fontA)){
+			highLight[findn][1]=highLight[middler][1]+fontA*1.2;
+		}
+		middler=findn;
+	}
+	middler=findSort(n,mid);
+	for(i=(mid-1);i>=0;i--){
+		findn=findSort(n,i);
+		if((highLight[findn][1]+fontA)<highLight[middler][1]){
+			highLight[findn][1]=highLight[middler][1]-fontA*1.2;
+		}
+		middler=findn;
+	}
+
+}
+
+
 
 //纵坐标标度横线,无数字（参照线，可有可无）
 void drawYLine(double sy,double dy, int peopleMax,int peopleMin,int peopleDelta){
@@ -270,8 +336,10 @@ void drawFoldLine(double sx, double sy, double dx, double dy, int peopleMin, int
 	RECORD *temp=NULL;
 	double nowPointY, lastPointY;//当前点基准线以上delta值，上一个点基准线以上delta值
 	int j=0,k=0;
+	double fontA;
 	//double r=dx*0.05;//重点记号圈大小
 
+	fontA=GetFontAscent();
 	temp=rpHeadZoom;
 	nowPointY=(temp->number[i]-peopleMin)*dy;//基准线以上delta
 
@@ -283,11 +351,9 @@ void drawFoldLine(double sx, double sy, double dx, double dy, int peopleMin, int
 	else if(highLight[i][2]==1){
 		SetPenColor("Red");
 	}
-	else{//报错红色
+	else{//报错黄色
 		SetPenColor("Yellow");
 	}
-	
-
 	//drawLabel(sx, coordinateLabelY, temp->date);//横排版本第一个点的横坐标日期
 	
 	lastPointY=nowPointY;
@@ -313,7 +379,10 @@ void drawFoldLine(double sx, double sy, double dx, double dy, int peopleMin, int
 		//下一个点
 		temp=temp->next;
 	}
-	lineName(sx+dx*(j-0.75), sy+nowPointY,dx,i);
+
+	highLight[i][0]=sx+dx*(j-0.75);
+	highLight[i][1]=sy+nowPointY-fontA/2;
+	//lineName(sx+dx*(j-0.75), sy+nowPointY,dx,i);
 
 }
 
@@ -361,35 +430,26 @@ void peopleLabel(RECORD *temp, double dx, double labelX, double labelY, int peop
 	else if(highLight[i][2]==1){
 		SetPenColor("Red");
 	}
-	else{//报错红色
+	else{//报错黄色
 		SetPenColor("Cyan");
 	}
 }
 
 //图例标注哪条线
-//(px, py)是当前线的最后一个点坐标（横有调整，dx控制box宽度，i是第几条线
+//(px, py)是当前线的label左下角坐标，dx控制box宽度，i是第几条线
 void lineName(double px,double py,double dx, int i){
-	double nx,ny;
-	double fontA;
 	int k;
+	double fontA;
+	
 	KEY *temp;
-	fontA=GetFontAscent();
-	nx=px;
-	ny=py-fontA/2;
 	temp=kp;
-
+	fontA=GetFontAscent();
 	//确定对应的KEY
 	for(k=0;k<i;k++){
 		temp=temp->next;
 	}
 	SetPenColor("Light Gray");
-	drawBox(nx, ny, dx, fontA, 1,temp->name, 'c', "Black");
-	highLightBoxdx=dx;
-
-	//drawLabel(nx,ny,temp->name);
-	//更新highLight
-	highLight[i][0]=nx;
-	highLight[i][1]=ny;
+	drawBox(px, py, dx, fontA,1,temp->name, 'c', "Black");
 }
 
 //mouseEvent里判断鼠标是否点击box区域，需要高亮

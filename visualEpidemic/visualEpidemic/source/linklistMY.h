@@ -16,7 +16,7 @@ struct key{
 typedef struct key KEY;
 
 RECORD* newLinkRECORD();
-RECORD* addLinkRECORD(RECORD* head, RECORD* tail,char *datex,int num1,int num2);
+RECORD* addLinkRECORD(RECORD* head, RECORD* tail,char *datex,int num1,int num2,int num3);
 KEY* newLinkKEY();
 KEY* addLinkKEY(KEY* head, KEY* tail,char *namex);
 

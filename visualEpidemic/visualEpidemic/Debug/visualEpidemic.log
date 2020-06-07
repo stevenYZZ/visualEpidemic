@@ -1,10 +1,12 @@
-﻿Build started 2020/6/7 0:21:29.
+﻿Build started 2020/6/7 23:53:05.
      1>Project "E:\gitVisual\visualEpidemic\visualEpidemic\visualEpidemic\visualEpidemic.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\visualEpidemic.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          D:\ProgramFiles\VC\bin\CL.exe /c /I../libgraphics /I../simpleGUI /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _CRT_SECURE_NO_WARNINGS /D _CRT_NONSTDC_NO_DEPRECATE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt source\visualization.c
          visualization.c
+     1>e:\gitvisual\visualepidemic\visualepidemic\visualepidemic\source\visualization.c(102): warning C4101: 'test1' : unreferenced local variable
+     1>e:\gitvisual\visualepidemic\visualepidemic\visualepidemic\source\visualization.c(102): warning C4101: 'ts2' : unreferenced local variable
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -38,4 +40,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.76
+Time Elapsed 00:00:00.66

@@ -88,8 +88,9 @@ void Main()
 	RECORD *rpHead=NULL,*rpTail=NULL;
 	KEY *kpHead=NULL, *kpTail=NULL;
 	char datex[10]="2020";
+	char namex2[10]="second";
 	char namex[10]="first";
-	int num1,num2;
+	int num1,num2,num3;
 
 	rpHead=newLinkRECORD();
 	rp=rpHead;
@@ -100,16 +101,19 @@ void Main()
 	datex[i]='\0';*/
 	num1=1;
 	num2=2;
+	num3=2;
 	strcpy(rpHead->date,datex);
 	rpHead->number[0]=num1;
 	rpHead->number[1]=num2;
+	rpHead->number[2]=num3;
 	rpTail=rpHead;
 
 	for(i=0;i<=2;i++){
 		//datex不变
 		num1=num1+10*i;
 		num2=num2+20*i;
-		rpHead=addLinkRECORD(rpHead,rpTail,datex,num1,num2);
+		num3=num2-2;
+		rpHead=addLinkRECORD(rpHead,rpTail,datex,num1,num2,num3);
 		rpTail=rpTail->next;
 	}
 	rpHeadZoom=rp;
@@ -123,6 +127,9 @@ void Main()
 	kpTail=kpHead;
 	kpHead=addLinkKEY(kpHead,kpTail,namex);
 	kpTail=kpTail->next;
+	kpHead=addLinkKEY(kpHead,kpTail,namex2);
+	kpTail=kpTail->next;
+
 	//录入结束
 
 	

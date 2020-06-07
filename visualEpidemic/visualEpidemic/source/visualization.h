@@ -9,8 +9,8 @@ extern double winWidth, winHeight;   // 窗口尺寸
 
 extern double coordinateX,coordinateY;  //坐标系的左下角点
 extern double coordinateWidth, coordinateHeight;  //坐标系的x/y轴长度，带drawArea();里确定
-extern double highLight[10][3];  //是否高亮，[][0]x坐标，[][1]y坐标，[][2]是否高亮
-double dx; //判断高亮要用到box的宽
+extern double highLight[10][4];  //是否高亮，[][0]x坐标，[][1]y坐标，[][2]是否高亮
+double highLightBoxdx; //判断高亮要用到box的宽
 extern RECORD *rp, *rpHeadZoom,*rpTailZoom;
 extern KEY *kp;
 
@@ -36,6 +36,9 @@ void lineName(double px,double py,double dx, int i);
 void peopleLabel(RECORD *temp, double dx, double labelX, double labelY, int peopleMin, int peopleMax, int i);
 void judgeHighLight(double mx,double my);
 void updateHighLight(int i,int n);
+void sortLineName(int n);
+void adjustLineName(int n);
+int findSort(int n,int i);
 
 //Button函数
 //Button绘制函数

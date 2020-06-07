@@ -19,7 +19,7 @@ RECORD* newLinkRECORD(){
 	return head;
 }
 
-RECORD* addLinkRECORD(RECORD* head, RECORD* tail,char *datex,int num1,int num2){
+RECORD* addLinkRECORD(RECORD* head, RECORD* tail,char *datex,int num1,int num2,int num3){
 	RECORD* p=NULL;
 
 	p=(RECORD*)malloc(sizeof(RECORD));
@@ -27,7 +27,7 @@ RECORD* addLinkRECORD(RECORD* head, RECORD* tail,char *datex,int num1,int num2){
 	strcpy(p->date,datex);
 	p->number[0]=num1;
 	p->number[1]=num2;
-
+	p->number[2]=num3;
 	p->prior=tail;
 	tail->next=p;
 

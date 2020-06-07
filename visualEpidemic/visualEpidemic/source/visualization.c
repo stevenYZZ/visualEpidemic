@@ -172,6 +172,7 @@ void drawYLine(double sy,double dy, int peopleMax,int peopleMin,int peopleDelta)
 void drawArea(){
 	double areaWidth, areaHeight;  //长方形area的宽、长
 	double areaX, areaY;  //图像area左下角点
+	double fontH=GetFontHeight();  //字
 
 	areaX=winWidth*0.1;
 	areaY=winHeight*0.25;
@@ -194,14 +195,23 @@ void drawArea(){
 	//y轴
 	MovePen(coordinateX,coordinateY);
 	DrawLine(0,coordinateHeight);
+	drawLabel(coordinateX-areaWidth*0.05,coordinateY+coordinateHeight-fontH*0,"n");
+	drawLabel(coordinateX-areaWidth*0.05,coordinateY+coordinateHeight-fontH*1,"u");
+	drawLabel(coordinateX-areaWidth*0.05,coordinateY+coordinateHeight-fontH*2,"m");
+	drawLabel(coordinateX-areaWidth*0.05,coordinateY+coordinateHeight-fontH*3,"b");
+	drawLabel(coordinateX-areaWidth*0.05,coordinateY+coordinateHeight-fontH*4,"e");
+	drawLabel(coordinateX-areaWidth*0.05,coordinateY+coordinateHeight-fontH*5,"r");
 	//小箭头
+	MovePen(coordinateX,coordinateY+coordinateHeight);
 	DrawLine(coordinateHeight*0.05,-coordinateHeight*0.05);
 	MovePen(coordinateX,coordinateY+coordinateHeight);
 	DrawLine(-coordinateHeight*0.05,-coordinateHeight*0.05);
 	//x轴
 	MovePen(coordinateX,coordinateY);
 	DrawLine(coordinateWidth,0);
+	drawLabel(coordinateX+coordinateWidth,coordinateY-fontH,"date");
 	//小箭头
+	MovePen(coordinateX+coordinateWidth,coordinateY);
 	DrawLine(-coordinateHeight*0.05,+coordinateHeight*0.05);
 	MovePen(coordinateX+coordinateWidth,coordinateY);
 	DrawLine(-coordinateHeight*0.05,-coordinateHeight*0.05);
@@ -337,6 +347,7 @@ void drawFoldLine(double sx, double sy, double dx, double dy, int peopleMin, int
 	double nowPointY, lastPointY;//当前点基准线以上delta值，上一个点基准线以上delta值
 	int j=0,k=0;
 	double fontA;
+	char num[10];
 	//double r=dx*0.05;//重点记号圈大小
 
 	fontA=GetFontAscent();
@@ -382,6 +393,9 @@ void drawFoldLine(double sx, double sy, double dx, double dy, int peopleMin, int
 
 	highLight[i][0]=sx+dx*(j-0.75);
 	highLight[i][1]=sy+nowPointY-fontA/2;
+	////尾端标值，需要对应改highLight[][0]=sx+dx*(j-0.5)
+	//drawLabel(sx+dx*(j-0.9),sy+nowPointY-fontA/2,itoa(rpTailZoom->number[i],num,10));
+	
 	//lineName(sx+dx*(j-0.75), sy+nowPointY,dx,i);
 
 }

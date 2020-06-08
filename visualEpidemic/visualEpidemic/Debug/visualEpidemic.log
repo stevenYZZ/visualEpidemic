@@ -1,0 +1,64 @@
+﻿生成启动时间为 2020/6/6 16:44:26。
+     1>项目“C:\Users\yutia\Desktop\visual epidemic\dyqve\visualEpidemic-master\visualEpidemic\visualEpidemic\visualEpidemic.vcxproj”在节点 2 上(build 个目标)。
+     1>InitializeBuildStatus:
+         正在创建“Debug\visualEpidemic.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+       ClCompile:
+         D:\Program Files (x86)\vs2010\VC\bin\CL.exe /c /I../libgraphics /I../simpleGUI /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _CRT_SECURE_NO_WARNINGS /D _CRT_NONSTDC_NO_DEPRECATE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt ..\libgraphics\exceptio.c ..\libgraphics\genlib.c ..\libgraphics\graphics.c ..\libgraphics\linkedlist.c ..\libgraphics\random.c ..\libgraphics\simpio.c ..\libgraphics\strlib.c ..\simpleGUI\imgui.c source\common.c source\edit.c source\files.c source\linklistMY.c source\predict.c source\TRY.c source\visualization.c try2.c
+         try2.c
+         visualization.c
+         TRY.c
+         predict.c
+         linklistMY.c
+         files.c
+         edit.c
+         common.c
+         imgui.c
+         strlib.c
+     1>c:\users\yutia\desktop\visual epidemic\dyqve\visualepidemic-master\visualepidemic\libgraphics\strlib.c(139): warning C4018: “>”: 有符号/无符号不匹配
+     1>c:\users\yutia\desktop\visual epidemic\dyqve\visualepidemic-master\visualepidemic\libgraphics\strlib.c(152): warning C4018: “>”: 有符号/无符号不匹配
+         simpio.c
+         random.c
+         linkedlist.c
+         graphics.c
+     1>c:\users\yutia\desktop\visual epidemic\dyqve\visualepidemic-master\visualepidemic\libgraphics\graphics.c(822): warning C4101: “consoleRect”: 未引用的局部变量
+     1>c:\users\yutia\desktop\visual epidemic\dyqve\visualepidemic-master\visualepidemic\libgraphics\graphics.c(1266): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+     1>c:\users\yutia\desktop\visual epidemic\dyqve\visualepidemic-master\visualepidemic\libgraphics\graphics.c(1267): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+     1>c:\users\yutia\desktop\visual epidemic\dyqve\visualepidemic-master\visualepidemic\libgraphics\graphics.c(1268): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+     1>c:\users\yutia\desktop\visual epidemic\dyqve\visualepidemic-master\visualepidemic\libgraphics\graphics.c(1654): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
+         genlib.c
+         exceptio.c
+         正在生成代码...
+       ManifestResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\visualEpidemic.exe.embed.manifest.res" Debug\visualEpidemic_manifest.rc 
+       Link:
+         D:\Program Files (x86)\vs2010\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\yutia\Desktop\visual epidemic\dyqve\visualEpidemic-master\visualEpidemic\Debug\visualEpidemic.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\visualEpidemic.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\yutia\Desktop\visual epidemic\dyqve\visualEpidemic-master\visualEpidemic\Debug\visualEpidemic.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\yutia\Desktop\visual epidemic\dyqve\visualEpidemic-master\visualEpidemic\Debug\visualEpidemic.lib" /MACHINE:X86 Debug\visualEpidemic.exe.embed.manifest.res
+         Debug\exceptio.obj
+         Debug\genlib.obj
+         Debug\graphics.obj
+         Debug\linkedlist.obj
+         Debug\random.obj
+         Debug\simpio.obj
+         Debug\strlib.obj
+         Debug\imgui.obj
+         Debug\common.obj
+         Debug\edit.obj
+         Debug\files.obj
+         Debug\linklistMY.obj
+         Debug\predict.obj
+         Debug\TRY.obj
+         Debug\visualization.obj
+         Debug\try2.obj
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\visualEpidemic.exe.embed.manifest" /manifest Debug\visualEpidemic.exe.intermediate.manifest
+         所有输出均为最新。
+       LinkEmbedManifest:
+         所有输出均为最新。
+         visualEpidemic.vcxproj -> C:\Users\yutia\Desktop\visual epidemic\dyqve\visualEpidemic-master\visualEpidemic\Debug\visualEpidemic.exe
+       FinalizeBuildStatus:
+         正在删除文件“Debug\visualEpidemic.unsuccessfulbuild”。
+         正在对“Debug\visualEpidemic.lastbuildstate”执行 Touch 任务。
+     1>已完成生成项目“C:\Users\yutia\Desktop\visual epidemic\dyqve\visualEpidemic-master\visualEpidemic\visualEpidemic\visualEpidemic.vcxproj”(build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:02.76

@@ -58,13 +58,53 @@ void MouseEventProcess(int x, int y, int button, int event)
 {	
 	double mx, my;
 	static double omx=0,omy=0;
-	
+	int i,moveTimes=0;
+	static int flagMouseMove=0;
+	double dx, moveArea,moveDistance;  //areaHeight=winHeight*0.5;
+
+	moveArea=(winHeight*0.5)*0.2;
+	dx=coordinateWidth*0.9/(getDateNumber(rpHeadZoom, rpTailZoom));//和画图时候一样
  	mx = ScaleXInches(x);/*pixels --> inches*/
  	my = ScaleYInches(y);/*pixels --> inches*/
 
 	
 	switch(event){
+		case BUTTON_DOWN:
+			omx=mx;
+			omy=my;
+			//判断鼠标拖拽起始位置是否在该区域
+			if(omy>=coordinateY-moveArea && omy<=coordinateY+moveArea){
+				if(omx>=coordinateX && omx<=coordinateX+coordinateWidth){
+					flagMouseMove=1;
+				}
+			}
+			break;
 		case BUTTON_UP:
+			if(flagMouseMove==1){
+				//判断鼠标拖拽终止位置是否仍然在该区域
+				if(my>=coordinateY-moveArea && my<=coordinateY+moveArea){
+					if(mx>=coordinateX && mx<=coordinateX+coordinateWidth){
+						moveDistance=mx-omx;
+						if(moveDistance>=0){
+							moveTimes=moveDistance/dx;
+							for(i=1;i<=moveTimes;i++){
+								buttonLeft();
+							}//for
+						}//if>=0
+					
+						else{
+							moveDistance=mx-omx;
+							moveDistance=-moveDistance;
+							moveTimes=moveDistance/dx;
+							for(i=1;i<=moveTimes;i++){
+								buttonRight();
+							}//for
+						}//else
+					}
+				}
+			}//if flagMouseMove
+			flagMouseMove=0;
+			//这里顺序不能提前
 			omx=mx;
 			omy=my;
 			judgeHighLight(omx,omy);
@@ -100,7 +140,7 @@ void Main()
 	}
 	datex[i]='\0';*/
 	num1=1;
-	num2=2;
+	num2=50;
 	num3=2;
 	strcpy(rpHead->date,datex);
 	rpHead->number[0]=num1;
@@ -108,11 +148,11 @@ void Main()
 	rpHead->number[2]=num3;
 	rpTail=rpHead;
 
-	for(i=0;i<=2;i++){
+	for(i=0;i<=6;i++){
 		//datex不变
 		num1=num1+10*i;
 		num2=num2+20*i;
-		num3=num2-2;
+		num3=num2-40;
 		rpHead=addLinkRECORD(rpHead,rpTail,datex,num1,num2,num3);
 		rpTail=rpTail->next;
 	}

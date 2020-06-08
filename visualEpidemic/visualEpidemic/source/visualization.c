@@ -66,7 +66,6 @@ void drawPic(){
 
 	drawArea();
 
-
 	n = getKeyNumber(kp);
 	peopleDelta = getTotalPeopleNumber(rp,n,&peopleMax,&peopleMin);
 	dateNumber = getDateNumber(rpHeadZoom,rpTailZoom);
@@ -75,10 +74,11 @@ void drawPic(){
 	dy=coordinateHeight*0.9/peopleDelta;
 	sx=coordinateWidth*0.05+coordinateX;
 	sy=coordinateHeight*0.05+coordinateY;
+
 	drawYLine(sy,dy,peopleMax,peopleMin,peopleDelta);
 	printDateX(sx,sy,dx,dy,dateNumber);
 
-	highLightBoxdx=dx;
+	highLightBoxdx=coordinateWidth/6;
 
 	//折线绘制
 	for(i=0;i<n;i++){
@@ -88,8 +88,8 @@ void drawPic(){
 	sortLineName(n);
 	adjustLineName(n);
 	for(i=0;i<n;i++){
-		highLight[i][0]=sx+dx*(dateNumber-0.75);//暴力改bug可能治标不治本
-		lineName(highLight[i][0],highLight[i][1],dx,i);
+		highLight[i][0]=sx+dx*(dateNumber-0.25);//暴力改bug可能治标不治本
+		lineName(highLight[i][0],highLight[i][1],i);
 	}
 }
 
@@ -141,7 +141,7 @@ void adjustLineName(int n){
 	middler=findSort(n,mid);
 	for(i=(mid-1);i>=0;i--){
 		findn=findSort(n,i);
-		if((highLight[findn][1]+fontA)<highLight[middler][1]){
+		if((highLight[findn][1]+fontA)>highLight[middler][1]){
 			highLight[findn][1]=highLight[middler][1]-fontA*1.2;
 		}
 		middler=findn;
@@ -180,7 +180,7 @@ void drawArea(){
 	areaHeight=winHeight*0.5;
 
 	coordinateX=areaX+areaWidth*0.1;
-	coordinateY=areaY+areaHeight*0.1;
+	coordinateY=areaY+areaHeight*0.16;
 
 	coordinateHeight=areaHeight*0.8;  //坐标系横轴占areaWidth的0.8
 	coordinateWidth=areaWidth*0.8;  //坐标系纵轴占areaHeight的0.8
@@ -260,10 +260,11 @@ int getDateNumber(RECORD *rpHeadZoom, RECORD *rpTailZoom){
 	int count=0;
 	RECORD *temp;
 	temp = rpHeadZoom;
-	while(temp->next!=NULL){
+	while(temp->next!=rpTailZoom){
 		count++;
 		temp=temp->next;
 	}
+	count++;
 	count++;
 	return count;
 }
@@ -350,6 +351,7 @@ void drawFoldLine(double sx, double sy, double dx, double dy, int peopleMin, int
 	char num[10];
 	//double r=dx*0.05;//重点记号圈大小
 
+	dateNumber=getDateNumber(rpHeadZoom,rpTailZoom);
 	fontA=GetFontAscent();
 	temp=rpHeadZoom;
 	nowPointY=(temp->number[i]-peopleMin)*dy;//基准线以上delta
@@ -373,7 +375,7 @@ void drawFoldLine(double sx, double sy, double dx, double dy, int peopleMin, int
 	peopleLabel(temp,dx, sx+dx*j, sy+nowPointY, peopleMin, peopleMax, i);
 	//下一个点
 	temp=temp->next;
-
+	
 	for(j=1;j<dateNumber;j++){
 		MovePen(sx+dx*(j-1),sy+nowPointY);
 		nowPointY=(temp->number[i]-peopleMin)*dy;
@@ -391,9 +393,9 @@ void drawFoldLine(double sx, double sy, double dx, double dy, int peopleMin, int
 		temp=temp->next;
 	}
 
-	highLight[i][0]=sx+dx*(j-0.75);
+	highLight[i][0]=sx+dx*(j-0.25);
 	highLight[i][1]=sy+nowPointY-fontA/2;
-	////尾端标值，需要对应改highLight[][0]=sx+dx*(j-0.5)
+	////尾端标值，需要对应改highLight[][0]=sx+dx*(j-0.25)
 	//drawLabel(sx+dx*(j-0.9),sy+nowPointY-fontA/2,itoa(rpTailZoom->number[i],num,10));
 	
 	//lineName(sx+dx*(j-0.75), sy+nowPointY,dx,i);
@@ -451,11 +453,13 @@ void peopleLabel(RECORD *temp, double dx, double labelX, double labelY, int peop
 
 //图例标注哪条线
 //(px, py)是当前线的label左下角坐标，dx控制box宽度，i是第几条线
-void lineName(double px,double py,double dx, int i){
+void lineName(double px,double py, int i){
 	int k;
 	double fontA;
-	
+	double dx;
 	KEY *temp;
+
+	dx=coordinateWidth/6;
 	temp=kp;
 	fontA=GetFontAscent();
 	//确定对应的KEY

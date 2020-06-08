@@ -10,7 +10,7 @@ extern double winWidth, winHeight;   // 窗口尺寸
 extern double coordinateX,coordinateY;  //坐标系的左下角点
 extern double coordinateWidth, coordinateHeight;  //坐标系的x/y轴长度，带drawArea();里确定
 extern double highLight[10][4];  //是否高亮，[][0]x坐标，[][1]y坐标，[][2]是否高亮
-double highLightBoxdx; //判断高亮要用到box的宽
+extern double highLightBoxdx; //判断高亮要用到box的宽
 extern RECORD *rp, *rpHeadZoom,*rpTailZoom;
 extern KEY *kp;
 
@@ -29,10 +29,12 @@ int getTotalPeopleNumber(RECORD *rp,int n,int *peopleMax, int*peopleMin);
 void connnect(RECORD *rp, RECORD *futurep);
 void seperate(RECORD *rp);
 void buttonLeftest();
+void buttonRightest();
+void buttonLeft();
 void buttonRight();
 void buttonCustomize(int day1,int month1,int year1,int day2,int month2, int year2,int upper, int lower);
 void printDateX(double sx, double sy, double dx, double dy,int dateNumber);
-void lineName(double px,double py,double dx, int i);
+void lineName(double px,double py, int i);
 void peopleLabel(RECORD *temp, double dx, double labelX, double labelY, int peopleMin, int peopleMax, int i);
 void judgeHighLight(double mx,double my);
 void updateHighLight(int i,int n);

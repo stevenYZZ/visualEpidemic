@@ -1,0 +1,20 @@
+﻿Build started 2020/6/8 17:46:16.
+     1>Project "G:\大学\C\大程序\visualEpidemic-master\visualEpidemic\visualEpidemic\visualEpidemic.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\visualEpidemic.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         All outputs are up-to-date.
+       ManifestResourceCompile:
+         All outputs are up-to-date.
+       Link:
+         All outputs are up-to-date.
+       Manifest:
+         All outputs are up-to-date.
+       FinalizeBuildStatus:
+         Deleting file "Debug\visualEpidemic.unsuccessfulbuild".
+         Touching "Debug\visualEpidemic.lastbuildstate".
+     1>Done Building Project "G:\大学\C\大程序\visualEpidemic-master\visualEpidemic\visualEpidemic\visualEpidemic.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.05

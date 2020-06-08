@@ -8,9 +8,12 @@
 RECORD* newLinkRECORD(){
 	RECORD *head=NULL;
 	head=(RECORD*)malloc(sizeof(RECORD));
-	head->prior=NULL;
-	head->next=NULL;
-	return head;
+	if(head!=NULL){
+		head->prior=NULL;
+		head->next=NULL;
+		return head;
+	}
+	
 }
 
 //找出给定RECORD链表给定日期所在结点并返回
@@ -28,12 +31,15 @@ void addLinkRECORD(RECORD** tail,char datex[],int num[],int totalField){
 	RECORD *p=NULL;									//新增结点
 	int i;
 	p=(RECORD*)malloc(sizeof(RECORD));
-	p->next=NULL;
-	strcpy(p->date,datex);							//输入日期
-	for(i=0;i<=totalField;i++) p->number[i]=num[i];	//输入各字段人数
-	p->prior=*tail;
-	(*tail)->next=p;
-	*tail=p;
+	if(p!=NULL){
+		p->next=NULL;
+		strcpy(p->date,datex);							//输入日期
+		for(i=0;i<=totalField;i++) p->number[i]=num[i];	//输入各字段人数
+		p->prior=*tail;
+		(*tail)->next=p;
+		*tail=p;
+	}
+	
 }
 
 //在RECORD链表尾部删除一个节点
@@ -57,21 +63,27 @@ void writeLinkRECORD(RECORD* p0,int fieldNum, int numx){
 KEY* newLinkKEY(){
 	KEY *head=NULL;
 	head=(KEY*)malloc(sizeof(KEY));
-	head->name[0]='\0';
-	head->prior=NULL;
-	head->next=NULL;
-
-	return head;
+	if(head!=NULL){
+		head->name[0]='\0';
+		head->prior=NULL;
+		head->next=NULL;
+		return head;
+	}
+	
+	
 }
 //向KEY链表尾部增加一个结点
 void addLinkKEY(KEY** tail,char *namex){
 	KEY* p=NULL;
 	p=(KEY*)malloc(sizeof(KEY));
-	p->next=NULL;
-	strcpy(p->name,namex);					//输入字段名
-	p->prior=*tail;
-	(*tail)->next=p;
-	*tail=p;
+	if(p!=NULL){
+		p->next=NULL;
+		strcpy(p->name,namex);					//输入字段名
+		p->prior=*tail;
+		(*tail)->next=p;
+		*tail=p;
+	}
+	
 }
 
 //在KEY链表尾部删除一个节点

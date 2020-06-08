@@ -57,23 +57,25 @@ void display(){
 
 
 void drawPic(){
-	int i, n=-1, peopleDelta=-1;
+	int i,j, n=-1, peopleDelta=-1;
 	int dateNumber;//首末日期之间天数
 	double sx,sy;//第一天+人数min时起笔点坐标，与轴有距离
 	double dx,dy;//每个点横纵坐标变化标准间隔
 	int peopleMin=-1,peopleMax=-1;
-
+	double barDy;
+	RECORD *p;
 
 	drawArea();
 
 	n = getKeyNumber(kp);
-	peopleDelta = getTotalPeopleNumber(rp,n,&peopleMax,&peopleMin);
+	peopleDelta = getTotalPeopleNumber(n,&peopleMax,&peopleMin);
 	dateNumber = getDateNumber(rpHeadZoom,rpTailZoom);
 	
 	dx=coordinateWidth*0.9/(dateNumber);
 	dy=coordinateHeight*0.9/peopleDelta;
 	sx=coordinateWidth*0.05+coordinateX;
 	sy=coordinateHeight*0.05+coordinateY;
+	barDy=coordinateHeight*0.4/peopleMax;//柱状图最高占据y轴0.4
 
 	drawYLine(sy,dy,peopleMax,peopleMin,peopleDelta);
 	printDateX(sx,sy,dx,dy,dateNumber);
@@ -82,8 +84,25 @@ void drawPic(){
 
 	//折线绘制
 	for(i=0;i<n;i++){
-		drawFoldLine(sx,sy,dx,dy,peopleMin,peopleMax,dateNumber,i);  
+		drawFoldLine(sx,sy,dx,dy,peopleMin,peopleMax,dateNumber,i); 
 	}
+
+	//柱状图
+	if(dx>0.1*coordinateX){
+		p=rpHeadZoom;
+		j=0;
+		while(p->next!=rpTailZoom){
+			drawBar(sx, dx, barDy,n, j, p);
+			j++;
+			p=p->next;
+		}
+		drawBar(sx, dx, barDy,n, j, p);
+		j++;
+		p=p->next;
+		drawBar(sx, dx, barDy,n, j, p);
+	}
+	
+	
 	//标注线名字
 	sortLineName(n);
 	adjustLineName(n);
@@ -92,6 +111,23 @@ void drawPic(){
 		lineName(highLight[i][0],highLight[i][1],i);
 	}
 }
+
+void drawBar(double sx, double dx, double barDy,int n, int j, RECORD* p){
+	double width,x,h;
+	int i;
+	width=dx*0.7/n;
+	x=sx+dx*j-0.35*dx;
+	SetPenColor("Brown");
+	for(i=0;i<n;i++){
+		x+=width;
+		h=p->number[i]*barDy;
+		drawRectangle(x,coordinateY, width,h , 0);
+	}
+}
+
+
+
+
 
 //排序标号tag的位置，避免重合
 //调整highLight[][4],序号越小越下面(0-6)
@@ -243,17 +279,17 @@ int getKeyNumber(KEY *p){
 
 
 
-//得dateNumber总天数和总的头尾地址
-void getOriginalDateHeadTail(RECORD *rp,RECORD *rpHeadZoom, RECORD *rpTailZoom){
-	RECORD *temp=rp;
-
-	while (temp->next != NULL){
-		temp=temp->next;
-	}
-
-	rpHeadZoom=rp;
-	rpTailZoom=temp;
-}
+////得dateNumber总天数和总的头尾地址
+//void getOriginalDateHeadTail(RECORD *rp,RECORD *rpHeadZoom, RECORD *rpTailZoom){
+//	RECORD *temp=rp;
+//
+//	while (temp->next != NULL){
+//		temp=temp->next;
+//	}
+//
+//	rpHeadZoom=rp;
+//	rpTailZoom=temp;
+//}
 
 //原始/缩放后头尾之间天数
 int getDateNumber(RECORD *rpHeadZoom, RECORD *rpTailZoom){
@@ -270,11 +306,11 @@ int getDateNumber(RECORD *rpHeadZoom, RECORD *rpTailZoom){
 }
 
 //得到这个文件中数据，人数的最大值、最小值，返回max和min的差值，用作y轴坐标确定
-int getTotalPeopleNumber(RECORD *rp,int n,int *peopleMax, int *peopleMin){
+int getTotalPeopleNumber(int n,int *peopleMax, int *peopleMin){
 	int i,max=0,min=rp->number[0];
 	RECORD *temp=NULL;
-	temp=rp;
-	while(temp->next!=NULL){
+	temp=rpHeadZoom;
+	while(temp->next!=rpTailZoom){
 		for(i=0;i<=n-1;i++){
 			if(temp->number[i]>max){
 				max=temp->number[i];
@@ -285,6 +321,15 @@ int getTotalPeopleNumber(RECORD *rp,int n,int *peopleMax, int *peopleMin){
 		}
 		temp=temp->next;
 	}
+	for(i=0;i<=n-1;i++){
+		if(temp->number[i]>max){
+			max=temp->number[i];
+		}
+		else if(temp->number[i]<min){
+			min=temp->number[i];
+		}
+	}
+	temp=temp->next;
 	for(i=0;i<=n-1;i++){
 		if(temp->number[i]>max){
 			max=temp->number[i];
@@ -351,7 +396,6 @@ void drawFoldLine(double sx, double sy, double dx, double dy, int peopleMin, int
 	char num[10];
 	//double r=dx*0.05;//重点记号圈大小
 
-	dateNumber=getDateNumber(rpHeadZoom,rpTailZoom);
 	fontA=GetFontAscent();
 	temp=rpHeadZoom;
 	nowPointY=(temp->number[i]-peopleMin)*dy;//基准线以上delta
@@ -709,6 +753,7 @@ void addViewButton(int a,int b,void(*p)(),char *str){     //button位置（a,b）a列
 	if (button(GenUIID(a*100+b*10), viewX+(a-1)*w+(a-1)*sw, viewY+b*h+(b-1)*sh, w, h, str))
 		p();//此处填写函数
 }
+
 void drawButtons(){	
 			
 	addViewButton(1,1,buttonZoomIn,"放大");

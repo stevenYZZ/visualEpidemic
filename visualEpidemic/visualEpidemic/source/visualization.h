@@ -25,7 +25,7 @@ void drawYLine(double sy,double dy, int peopleMax,int peopleMin,int peopleDelta)
 int judgeZoomIn();
 void buttonZoomIn();
 void buttonZoomOut();
-int getTotalPeopleNumber(RECORD *rp,int n,int *peopleMax, int*peopleMin);
+int getTotalPeopleNumber(int n,int *peopleMax, int*peopleMin);
 void connnect(RECORD *rp, RECORD *futurep);
 void seperate(RECORD *rp);
 void buttonLeftest();
@@ -41,7 +41,7 @@ void updateHighLight(int i,int n);
 void sortLineName(int n);
 void adjustLineName(int n);
 int findSort(int n,int i);
-
+void drawBar(double sx, double dx, double barDy,int n, int j, RECORD* p);
 //Buttonº¯Êý
 //Button»æÖÆº¯Êý
 void drawButtons();

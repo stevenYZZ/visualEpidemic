@@ -137,7 +137,7 @@ void Main()
 	rpHead->number[1]=2;
 	rpHead->number[2]=4;
 	rpTail=rpHead;
-	for(i=0;i<=2;i++){
+	for(i=0;i<=30;i++){
 		num[0]=1;
 		num[1]=2+i;
 		num[2]=3+i*2;
@@ -173,9 +173,7 @@ void Main()
 		highLight[i][2]=0;
 	}
 
-	if (n != 0){
-		getOriginalDateHeadTail(rp,rpHeadZoom,rpTailZoom);
-	}
+
 
 	//一开始没有display();的话，运行后鼠标不划到界面内就没有显示
 	display();

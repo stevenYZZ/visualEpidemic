@@ -1,15 +1,12 @@
-﻿Build started 2020/6/8 21:10:41.
+﻿Build started 2020/6/8 23:46:26.
      1>Project "E:\gitVisual\visualEpidemic\visualEpidemic\visualEpidemic\visualEpidemic.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\visualEpidemic.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          All outputs are up-to-date.
-       ManifestResourceCompile:
-         All outputs are up-to-date.
        Link:
          All outputs are up-to-date.
-       Manifest:
-         All outputs are up-to-date.
+         visualEpidemic.vcxproj -> E:\gitVisual\visualEpidemic\visualEpidemic\Debug\visualEpidemic.exe
        FinalizeBuildStatus:
          Deleting file "Debug\visualEpidemic.unsuccessfulbuild".
          Touching "Debug\visualEpidemic.lastbuildstate".
@@ -17,4 +14,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.06
+Time Elapsed 00:00:00.07

@@ -35,8 +35,8 @@ extern int globalEdit;
 
 //int类型1变0，0变1函数
 void commonTF(int *a);
-
-
+int ifRun(int n);
+char *nextDate(char today[]);
 #endif
 
 

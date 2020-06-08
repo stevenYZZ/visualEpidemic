@@ -15,9 +15,15 @@ struct key{
 };
 typedef struct key KEY;
 
-RECORD* newLinkRECORD();
-RECORD* addLinkRECORD(RECORD* head, RECORD* tail,char *datex,int num1,int num2,int num3);
-KEY* newLinkKEY();
-KEY* addLinkKEY(KEY* head, KEY* tail,char *namex);
+RECORD* newLinkRECORD();													//新建一个头结点为空的RECORD链表
+RECORD* searchLinkRECORD(RECORD* head, char datex[]);						//找出给定RECORD链表给定日期所在结点并返回
+void addLinkRECORD(RECORD* tail,char datex[],int num[],int totalField);		//在RECORD链表尾部增加一个结点
+void deleteLinkRECORD(RECORD* tail);										//在RECORD链表尾部删除一个节点
+void writeLinkRECORD(RECORD* p0,int fieldNum, int numx);					//在给定RECORD链表结点中给定字段写入新值
+
+KEY* newLinkKEY();															//新建一个头结点为空的KEY链表
+void addLinkKEY(KEY* tail,char* namex);										//在KEY链表尾部增加一个结点
+void deleteLinkKEY(KEY* tail);												//在KEY链表尾部删除一个节点
+int getFieldNum(KEY *p0);													//得到给定结点在链表中位置													
 
 #endif

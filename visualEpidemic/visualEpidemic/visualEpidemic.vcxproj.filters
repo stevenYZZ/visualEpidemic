@@ -57,13 +57,10 @@
     <ClCompile Include="source\visualization.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\TRY.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="try2.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\linklistMY.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\try.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

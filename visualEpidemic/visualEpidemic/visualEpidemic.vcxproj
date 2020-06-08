@@ -88,9 +88,8 @@
     <ClCompile Include="source\files.c" />
     <ClCompile Include="source\linklistMY.c" />
     <ClCompile Include="source\predict.c" />
-    <ClCompile Include="source\TRY.c" />
+    <ClCompile Include="source\try.c" />
     <ClCompile Include="source\visualization.c" />
-    <ClCompile Include="try2.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\libgraphics\boolean.h" />

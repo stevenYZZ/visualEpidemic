@@ -4,36 +4,56 @@
 
 #include "linklistMY.h"
 
-RECORD* newLinkRECORD();
-RECORD* addLinkRECORD(RECORD* head, RECORD* tail,char *datex,int num1,int num2);
-
-KEY* newLinkKEY();
-KEY* addLinkKEY(KEY* head, KEY* tail,char *namex);
-
+//新建一个头结点为空的RECORD链表
 RECORD* newLinkRECORD(){
 	RECORD *head=NULL;
 	head=(RECORD*)malloc(sizeof(RECORD));
 	head->prior=NULL;
 	head->next=NULL;
-
 	return head;
 }
 
-RECORD* addLinkRECORD(RECORD* head, RECORD* tail,char *datex,int num1,int num2){
-	RECORD* p=NULL;
+//找出给定RECORD链表给定日期所在结点并返回
+RECORD* searchLinkRECORD(RECORD* head, char datex[]){
+	RECORD *p=head;
+	while(strcmp(p->date,datex)!=0){
+		p=p->next;
+		if(p==NULL)break;
+	}
+	return p;					//如果不存在给定日期结点就返回NULL（注意报错）
+}
 
+//向RECORD链表尾部增加一个结点
+void addLinkRECORD(RECORD** tail,char datex[],int num[],int totalField){
+	RECORD *p=NULL;									//新增结点
+	int i;
 	p=(RECORD*)malloc(sizeof(RECORD));
 	p->next=NULL;
-	strcpy(p->date,datex);
-	p->number[0]=num1;
-	p->number[1]=num2;
-
-	p->prior=tail;
-	tail->next=p;
-
-	return head;
+	strcpy(p->date,datex);							//输入日期
+	for(i=0;i<=totalField;i++) p->number[i]=num[i];	//输入各字段人数
+	p->prior=*tail;
+	(*tail)->next=p;
+	*tail=p;
 }
 
+//在RECORD链表尾部删除一个节点
+void deleteLinkRECORD(RECORD* tail){
+	if(tail->prior==NULL)return;		//如果链表只有一个结点就不作为
+	else{								//否则删除尾结点
+		tail->prior->next=NULL;			
+		free(tail);
+	}
+}
+
+//在给定RECORD链表结点中给定字段写入新值
+void writeLinkRECORD(RECORD* p0,int fieldNum, int numx){
+	if(p0==NULL)return;
+	else p0->number[fieldNum]=numx;
+}
+
+
+
+//新建一个头结点为空的KEY链表
 KEY* newLinkKEY(){
 	KEY *head=NULL;
 	head=(KEY*)malloc(sizeof(KEY));
@@ -43,47 +63,33 @@ KEY* newLinkKEY(){
 
 	return head;
 }
-
-KEY* addLinkKEY(KEY* head, KEY* tail,char *namex){
+//向KEY链表尾部增加一个结点
+void addLinkKEY(KEY** tail,char *namex){
 	KEY* p=NULL;
-
 	p=(KEY*)malloc(sizeof(KEY));
 	p->next=NULL;
-	strcpy(p->name,namex);
-
-
-	p->prior=tail;
-	tail->next=p;
-
-	return head;
+	strcpy(p->name,namex);					//输入字段名
+	p->prior=*tail;
+	(*tail)->next=p;
+	*tail=p;
 }
 
-//int main(void){
-//	RECORD *rpHead=NULL,*rpTail=NULL;
-//	RECORD* temp=NULL;
-//	char datex[10];
-//	int num1,num2,i=0;
-//
-//	rpHead=newLinkRECORD();
-//
-//	//总共录入1+3=4条
-//	scanf("%s %d %d",datex,&num1,&num2);
-//	strcpy(rpHead->date,datex);
-//	rpHead->number[0]=num1;
-//	rpHead->number[1]=num2;
-//	rpTail=rpHead;
-//
-//	for(i=0;i<=2;i++){
-//		scanf("%s %d %d",datex,&num1,&num2);
-//		rpHead=addLinkRECORD(rpHead,rpTail,datex,num1,num2);
-//		rpTail=rpTail->next;
-//	}
-//	
-//	temp=rpHead;
-//	while(temp->next!=NULL){
-//		printf("%s  %d  %d\n",temp->date,temp->number[0],temp->number[1]);
-//		temp=temp->next;
-//	}
-//	printf("%s  %d  %d\n",temp->date,temp->number[0],temp->number[1]);
-//	return 0;
-//}
+//在KEY链表尾部删除一个节点
+void deleteLinkKEY(KEY* tail){
+	if(tail->prior==NULL)return;		//如果链表只有一个结点就不作为
+	else{								//否则删除尾结点
+		tail->prior->next=NULL;			
+		free(tail);
+	}
+}
+
+//得到给定结点在链表中位置
+int getFieldNum(KEY *p0){
+	KEY *p=p0;
+	int count=0;
+	while(p->prior!=NULL){
+		p=p->prior;
+		count++;
+	}
+	return count;
+}

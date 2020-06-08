@@ -55,7 +55,7 @@ void commonTF(int *a){
 
 
 
-//生成下一天日期字符串函数
+//生成下一天日期字符串函数(将输入字符串改为新日期)
 char *nextDate(char today[]){
 	char year[4];char month[2];char day[2]; //char类型年月日
 	int y,m,d;			//int类型年月日

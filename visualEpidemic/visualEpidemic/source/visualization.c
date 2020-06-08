@@ -27,6 +27,7 @@
 #include "linklistMY.h"
 #include "visualization.h"
 #include "edit.h"
+
 //预测链表有三天
 #define futureDays 3
 
@@ -41,7 +42,6 @@ KEY *kp=NULL;
 
 
 //界面刷新
-//所有button前端也要复制到这个函数里面
 
 void display(){
 	//塞入各部分可视化函数
@@ -49,7 +49,6 @@ void display(){
 	drawPic();
 	drawButtons();
 }
-
 
 void drawPic(){
 	int i, n=-1, peopleDelta=-1;

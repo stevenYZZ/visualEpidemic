@@ -31,10 +31,10 @@
 
 
 
-void DisplayClear(void); 
-void startTimer(int id,int timeinterval);
-void display(void); 
-void addEditButton(int a,int b,void(*p)(),char *str);
+//void DisplayClear(void); 
+//void startTimer(int id,int timeinterval);
+//void display(void); 
+//void addEditButton(int a,int b,void(*p)(),char *str);
 
 //新增函数
 
@@ -71,30 +71,22 @@ void Main()
 	//RECORD
 	RECORD *rpHead=NULL,*rpTail=NULL;
 	KEY *kpHead=NULL, *kpTail=NULL;
-	char datex[10]="2020";
-	char namex[10]="first";
-	int num1,num2;
+	char datex[10]="20200101";
+	char name[4][10]={"first","second","third"};
+	int num[10];
 
 	rpHead=newLinkRECORD();
 	rp=rpHead;
-	//总共录入1+3=4条
-	/*for(i=0;i<=2;i++){
-		datex[i]=4;
-	}
-	datex[i]='\0';*/
-	num1=1;
-	num2=2;
 	strcpy(rpHead->date,datex);
-	rpHead->number[0]=num1;
-	rpHead->number[1]=num2;
+	rpHead->number[0]=1;
+	rpHead->number[1]=2;
+	rpHead->number[2]=3;
 	rpTail=rpHead;
-
 	for(i=0;i<=2;i++){
-		//datex不变
-		num1=num1+10*i;
-		num2=num2+20*i;
-		rpHead=addLinkRECORD(rpHead,rpTail,datex,num1,num2);
-		rpTail=rpTail->next;
+		num[0]=1;
+		num[1]=2;
+		num[2]=3;
+		addLinkRECORD(&rpTail,nextDate(datex),num,3);
 	}
 	rpHeadZoom=rp;
 	rpTailZoom=rpTail;
@@ -102,11 +94,14 @@ void Main()
 	//KEY
 	kpHead=newLinkKEY();
 	kp=kpHead;
-	//总共录入2条
-	strcpy(kpHead->name,namex);
+	strcpy(kpHead->name,name[0]);
 	kpTail=kpHead;
-	kpHead=addLinkKEY(kpHead,kpTail,namex);
-	kpTail=kpTail->next;
+	addLinkKEY(&kpTail,name[1]);
+	addLinkKEY(&kpTail,name[2]);
+	//addLinkKEY(kpTail,name[2]);
+	writeLinkRECORD(searchLinkRECORD(rpHead,"20200101"),getFieldNum(kp),10);
+
+
 	//录入结束
 
 

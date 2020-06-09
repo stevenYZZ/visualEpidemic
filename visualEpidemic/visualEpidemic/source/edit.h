@@ -9,6 +9,7 @@ extern int globalEdit;
 //杂七杂八函数
 void empty();
 void err();
+void try0();
 
 
 //以下函数按button顺序排列

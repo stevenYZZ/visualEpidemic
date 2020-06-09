@@ -37,7 +37,7 @@ double coordinateX,coordinateY;  //坐标系的左下角点
 double coordinateWidth, coordinateHeight;  //坐标系的x/y轴长度，带drawArea();里确定
 
 RECORD *rp=NULL, *rpHeadZoom=NULL,*rpTailZoom=NULL;
-KEY *kp=NULL;
+KEY *kp=NULL,*kpHead=NULL;
 
 
 
@@ -48,6 +48,20 @@ void display(){
 	DisplayClear();  //清屏函数，自带
 	drawPic();
 	drawButtons();
+	drawMenu();// 绘制和处理菜单
+	if(globalActive==0){
+	
+	}else if(globalActive==1){
+		drawPrompt1();
+	}else if(globalActive==2){
+		drawPrompt2();
+	}else if(globalActive==3){
+		drawInputBox();
+	}else if(globalActive==4){
+		drawTipBox();
+	}
+
+	
 }
 
 void drawPic(){
@@ -472,7 +486,7 @@ void buttonCustomize(int day1,int month1,int year1,int day2,int month2, int year
 void addEditButton(int a,int b,void(*p)(),char *str){     //button位置（a,b）a列数(横坐标)，b行数（纵坐标），*p为按钮触发的函数
 	static double editW;						//编辑区宽度
 	static double editX = 8;					//编辑区button首位置x
-	static double editY = 6;					//编辑区button首位置y
+	static double editY = 3;					//编辑区button首位置y
 	static double editScaleX = 6;					//编辑区button宽度间距之比
 	static double editScaleY = 6;					//编辑区button高度间距之比
 	static double a0 = 4;						//编辑区一行button总个数
@@ -509,20 +523,136 @@ void addViewButton(int a,int b,void(*p)(),char *str){     //button位置（a,b）a列
 	if (button(GenUIID(a*100+b*10), viewX+(a-1)*w+(a-1)*sw, viewY+b*h+(b-1)*sh, w, h, str))
 		p();//此处填写函数
 }
+
+void drawMenu()
+{   
+	static char * menuListFile[] = {"文件",  
+		"打开  | Ctrl-O", // 快捷键必须采用[Ctrl-X]格式，放在字符串的结尾
+		"保存",
+		"关闭",
+		"Exit   | Ctrl-E"};
+	static char * menuListEdit[] = {"编辑",
+		"开启",
+		"关闭 | Ctrl-T"};
+	static char * menuListHelp[] = {"帮助",
+		"Use  | Ctrl-M",
+		"About"};
+	static char * selectedLabel = NULL;
+	double fH = GetFontHeight();
+	double x = 0;//fH/8;
+	double y = winHeight;
+	double h = fH*1.5; // 控件高度
+	double w = TextStringWidth(menuListHelp[0])*2; // 控件宽度
+	double wlist = TextStringWidth(menuListEdit[2])*1.2;
+	double xindent = winHeight/20; // 缩进
+	int    selection;
+	char *p;
+	// menu bar
+	drawMenuBar(0,y-h,winWidth,h);
+	// File 菜单
+	selection = menuList(GenUIID(0), x, y-h, w, wlist, h, menuListFile, sizeof(menuListFile)/sizeof(menuListFile[0]));
+    if( selection==1 ) {  p="test.txt";
+	               OpenFiles(p); }
+	if( selection==2 )
+	if( selection==4 )
+		exit(-1); // choose to exit
+	
+	// Edit 菜单
+	selection = menuList(GenUIID(0),x+w,  y-h, w, wlist,h, menuListEdit,sizeof(menuListEdit)/sizeof(menuListEdit[0]));
+	if( selection==1 ) globalEdit=1;
+	if(selection==2)globalEdit=0;
+
+	
+	// Help 菜单
+	
+	selection = menuList(GenUIID(0),x+2*w,y-h, w, wlist, h, menuListHelp,sizeof(menuListHelp)/sizeof(menuListHelp[0]));
+    
+	//Status(statusNumber);
+	}
 void drawButtons(){	
 			
 	addViewButton(1,1,buttonZoomIn,"放大");
 	addViewButton(2,1,buttonZoomOut,"缩小");
-	addViewButton(3,1,err,"适应屏幕");
+	addViewButton(3,1,try0,"实验");
 	addViewButton(4,1,err,"备用");
 	addViewButton(1,2,buttonLeftest,"左移到头");
 	addViewButton(2,2,buttonLeft,"左移");
 	addViewButton(3,2,buttonRight,"右移");
 	addViewButton(4,2,buttonRightest,"右移到头");
-	addEditButton(1,5,editOnOff,"编辑模式");
-	addEditButton(1,4,editNewDate,"新建日期");
-	addEditButton(1,3,editDeleteLastDate,"删除最后日期");
+	addEditButton(1,8,editOnOff,globalEdit?"编辑模式:ON":"编辑模式:OFF");
+	addEditButton(1,7,editNewDate,"新建日期");
+	addEditButton(1,6,editDeleteLastDate,"删除最后日期");
+	addEditButton(1,5,editChangeData,"修改参数");
+	addEditButton(1,4,editNewLine,"新增线");
+	addEditButton(1,3,editDeleteLine,"删除线");
 	addEditButton(1,2,err,"预测");
 	addEditButton(1,1,err,"更改预测模式");
 	
+}
+
+void drawPrompt1(){
+	double x=winWidth/2;
+	double y=winHeight/2;
+	double fH = GetFontHeight();
+	double h = fH*1.5; // 控件高度
+	SetPenColor("White");
+	drawRectangle(x-1.5,y-1,4,2,1);
+	SetPenColor("Black");
+	drawRectangle(x-1.5,y-1,4,2,0);
+	drawLabel(x-2+2*fH+1.5,y-2+fH+2.5,"尚未保存，确认退出？");
+	if (button(GenUIID(0), x-2+2*fH+1,y-2+fH+1, 1, h, "确定")) exit(-1);
+	if (button(GenUIID(1), x-2+2*fH+2.5,y-2+fH+1, 1, h, "取消"))globalActive=0;
+}
+
+void drawPrompt2(){
+	double x=winWidth/2;
+	double y=winHeight/2;
+	double fH = GetFontHeight();
+	double h = fH*1.5; // 控件高度
+	SetPenColor("White");
+	drawRectangle(x-1.5,y-1,4,2,1);
+	SetPenColor("Black");
+	drawRectangle(x-1.5,y-1,4,2,0);
+	drawLabel(x-1,y-2+fH+2.5,"温馨提示：本程序无撤销功能，");
+	drawLabel(x-0.5,y+0.5,"是否要进行当前操作？");
+	if (button(GenUIID(0), x-2+2*fH+1,y-2+fH+1, 1, h, "是")){
+		if(popStatus2=0);
+		else if(popStatus2=1);
+	}
+	if (button(GenUIID(1), x-2+2*fH+2.5,y-2+fH+1, 1, h, "否"))globalActive=0;
+}
+
+void drawInputBox(){
+	double x=winWidth/2;
+	double y=winHeight/2;
+	double fH = GetFontHeight();
+	double h = fH*1.5; // 控件高度
+	SetPenColor("White");
+	drawRectangle(x-1.5,y-1,4,2,1);
+	SetPenColor("Black");
+	drawRectangle(x-1.5,y-1,4,2,0);
+	drawLabel(x-2+2*fH+1.5,y-2+fH+2.5,popInputTip);
+	if (button(GenUIID(0), x-2+2*fH+1,y-2+fH+1, 1, h, "确定")){
+	
+	}
+	if (button(GenUIID(1), x-2+2*fH+2.5,y-2+fH+1, 1, h, "取消"))globalActive=0;
+	if( textbox(GenUIID(0), x, y, 2, h, popInput, sizeof(popInput) ) )
+	;
+}
+	//{	double v = 0;
+	//	sscanf(popInput, "%lf", &v);
+	//	return v;
+	//}
+
+void drawTipBox(){
+	double x=winWidth/2;
+	double y=winHeight/2;
+	double fH = GetFontHeight();
+	double h = fH*1.5; // 控件高度
+	SetPenColor("White");
+	drawRectangle(x-1.5,y-1,4,2,1);
+	SetPenColor("Black");
+	drawRectangle(x-1.5,y-1,4,2,0);
+	drawLabel(x+2*fH-1,y-2+fH+2.5,popTip);
+	if (button(GenUIID(0), x+2*fH-0.5,y-2+fH+1, 1, h, "确定")) globalActive=0;
 }

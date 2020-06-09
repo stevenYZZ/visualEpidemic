@@ -1,19 +1,12 @@
-﻿Build started 2020/6/8 20:44:41.
+﻿Build started 2020/6/9 14:08:27.
      1>Project "C:\Users\yutia\Desktop\visual epidemic\visualEpidemic(1)\visualEpidemic\visualEpidemic\visualEpidemic.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\visualEpidemic.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         D:\Program Files (x86)\vs2010\VC\bin\CL.exe /c /I../libgraphics /I../simpleGUI /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _CRT_SECURE_NO_WARNINGS /D _CRT_NONSTDC_NO_DEPRECATE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt source\TRY.c source\edit.c
+         D:\Program Files (x86)\vs2010\VC\bin\CL.exe /c /I../libgraphics /I../simpleGUI /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _CRT_SECURE_NO_WARNINGS /D _CRT_NONSTDC_NO_DEPRECATE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt source\edit.c
          edit.c
-         TRY.c
-     1>c:\users\yutia\desktop\visual epidemic\visualepidemic(1)\visualepidemic\visualepidemic\source\try.c(60): warning C4013: “display”未定义；假设外部返回 int
-     1>c:\users\yutia\desktop\visual epidemic\visualepidemic(1)\visualepidemic\visualepidemic\source\try.c(89): warning C4047: “函数”:“RECORD *”与“RECORD **”的间接级别不同
-     1>c:\users\yutia\desktop\visual epidemic\visualepidemic(1)\visualepidemic\visualepidemic\source\try.c(89): warning C4024: “addLinkRECORD”: 形参和实参 1 的类型不同
-     1>c:\users\yutia\desktop\visual epidemic\visualepidemic(1)\visualepidemic\visualepidemic\source\try.c(99): warning C4047: “函数”:“KEY *”与“KEY **”的间接级别不同
-     1>c:\users\yutia\desktop\visual epidemic\visualepidemic(1)\visualepidemic\visualepidemic\source\try.c(99): warning C4024: “addLinkKEY”: 形参和实参 1 的类型不同
-     1>c:\users\yutia\desktop\visual epidemic\visualepidemic(1)\visualepidemic\visualepidemic\source\try.c(100): warning C4047: “函数”:“KEY *”与“KEY **”的间接级别不同
-     1>c:\users\yutia\desktop\visual epidemic\visualepidemic(1)\visualepidemic\visualepidemic\source\try.c(100): warning C4024: “addLinkKEY”: 形参和实参 1 的类型不同
-         正在生成代码...
+     1>c:\users\yutia\desktop\visual epidemic\visualepidemic(1)\visualepidemic\visualepidemic\source\edit.c(70): warning C4047: “函数”:“RECORD *”与“RECORD **”的间接级别不同
+     1>c:\users\yutia\desktop\visual epidemic\visualepidemic(1)\visualepidemic\visualepidemic\source\edit.c(70): warning C4024: “addLinkRECORD”: 形参和实参 1 的类型不同
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -47,4 +40,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.89
+Time Elapsed 00:00:00.76

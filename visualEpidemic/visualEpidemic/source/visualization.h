@@ -11,10 +11,10 @@ extern double coordinateX,coordinateY;  //坐标系的左下角点
 extern double coordinateWidth, coordinateHeight;  //坐标系的x/y轴长度，带drawArea();里确定
 
 extern RECORD *rp, *rpHeadZoom,*rpTailZoom;
-extern KEY *kp;
+extern KEY *kp, *kpHead;
 
-
-void drawPic();  //相当于display()刷新
+void display();
+void drawPic();  
 void drawArea();  //绘制坐标系区域（大长方形）
 void getOriginalDateHeadTail(RECORD *rp,RECORD *rpHeadZoom, RECORD *rpTailZoom);
 int getDateNumber(RECORD *rpHeadZoom, RECORD *rpTailZoom);
@@ -34,10 +34,15 @@ void buttonCustomize(int day1,int month1,int year1,int day2,int month2, int year
 //Button函数
 //Button绘制函数
 void drawButtons();
-
 //Button排版函数
 void addEditButton(int a,int b,void(*p)(),char *str);    //button位置（a,b）a列数(横坐标)，b行数（纵坐标），*p为按钮触发的函数
-
 void addViewButton(int a,int b,void(*p)(),char *str);    //button位置（a,b）a列数(横坐标)，b行数（纵坐标），*p为按钮触发的函数
+//Menu绘制函数
+void drawMenu();
+//popwindows绘制函数
+void drawPrompt1();//是/否框
+void drawPrompt2();//是/否/取消框
+void drawInputBox();//输入框
+void drawTipBox();//提示框
 
 #endif

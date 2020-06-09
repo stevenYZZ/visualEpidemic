@@ -27,6 +27,7 @@
 #include "linklistMY.h"
 #include "visualization.h"
 #include "edit.h"
+
 //预测链表有三天
 #define futureDays 3
 
@@ -38,23 +39,32 @@ double highLight[10][4];  //是否高亮，[][0]x坐标，[][1]y坐标，[][2]是否高亮，[][
 double highLightBoxdx; //判断高亮要用到box的宽
 
 RECORD *rp=NULL, *rpHeadZoom=NULL,*rpTailZoom=NULL;
-KEY *kp=NULL;
+KEY *kp=NULL,*kpHead=NULL;
 
-//实验函数
-void err(){
-	exit(-1);
-}
+
 
 //界面刷新
-//所有button前端也要复制到这个函数里面
 
 void display(){
 	//塞入各部分可视化函数
 	DisplayClear();  //清屏函数，自带
 	drawPic();
 	drawButtons();
-}
+	drawMenu();// 绘制和处理菜单
+	if(globalActive==0){
+	
+	}else if(globalActive==1){
+		drawPrompt1();
+	}else if(globalActive==2){
+		drawPrompt2();
+	}else if(globalActive==3){
+		drawInputBox();
+	}else if(globalActive==4){
+		drawTipBox();
+	}
 
+	
+}
 
 void drawPic(){
 	int i,j, n=-1, peopleDelta=-1;
@@ -66,6 +76,7 @@ void drawPic(){
 	RECORD *p;
 
 	drawArea();
+
 
 	n = getKeyNumber(kp);
 	peopleDelta = getTotalPeopleNumber(n,&peopleMax,&peopleMin);
@@ -102,7 +113,6 @@ void drawPic(){
 		drawBar(sx, dx, barDy,n, j, p);
 	}
 	
-	
 	//标注线名字
 	sortLineName(n);
 	adjustLineName(n);
@@ -112,6 +122,7 @@ void drawPic(){
 	}
 }
 
+//画柱状图
 void drawBar(double sx, double dx, double barDy,int n, int j, RECORD* p){
 	double width,x,h;
 	int i;
@@ -125,19 +136,13 @@ void drawBar(double sx, double dx, double barDy,int n, int j, RECORD* p){
 	}
 }
 
-
-
-
-
 //排序标号tag的位置，避免重合
 //调整highLight[][4],序号越小越下面(0-6)
 //n总共线数量
 //#############################################################bug-更改highLight[1][0]开始改值
 void sortLineName(int n){
 	int i,j,num111;
-	double test1,ts2;
-	/*test1=highLight[1][0];
-	ts2=highLight[2][0];*/
+
 	for(i=0;i<n;i++){
 		num111=0;
 		for(j=0;j<n;j++){
@@ -278,6 +283,72 @@ int getKeyNumber(KEY *p){
 }
 
 
+//判断是否继续放大
+int judgeZoomIn(){
+	int count=0;
+	RECORD *temp=NULL;
+	temp=rpHeadZoom;
+	while(temp->next != rpTailZoom){
+		count++;
+		temp=temp->next;
+		if(count>2){
+			break;
+		}
+	}
+	if (count <= 1){  //仅剩<=3个数据
+		return 0;
+	}
+	else{  //剩余>=4个数据
+		return 1;
+	}
+}
+
+//放大调用
+void buttonZoomIn(){
+	if(judgeZoomIn()){//放大则头尾相反
+		rpHeadZoom=rpHeadZoom->next;
+		rpTailZoom=rpTailZoom->prior;
+	}
+	else{
+		return;
+	}
+}
+
+
+
+//缩小调用
+void buttonZoomOut(){
+	RECORD *temp;
+	if(rpHeadZoom->prior == NULL && rpTailZoom->next == NULL){//没有缩小余地，两端都到头
+		return;
+	}
+	if(rpHeadZoom->prior!=NULL&&rpTailZoom->next!=NULL){//两端都没到头
+		rpHeadZoom=rpHeadZoom->prior;
+		rpTailZoom=rpTailZoom->next;
+	}
+	else if(rpHeadZoom->prior==NULL){//首到头，判断尾部
+		temp=rpTailZoom->next;
+		if(temp->next !=NULL){//尾端可以缩两个
+			rpTailZoom=temp->next;
+			return;
+		}
+		else{//尾端缩一个
+			rpTailZoom=temp;
+			return;
+		}
+	}//else if
+	else if(rpTailZoom->next == NULL){
+		temp=rpHeadZoom->prior;
+		if(temp->prior!=NULL){//头部可以缩两个
+			rpHeadZoom=temp->prior;
+			return;
+		}
+		else{//头部缩一个
+			rpHeadZoom=temp;
+			return;
+		}
+	}//else if
+}
 
 ////得dateNumber总天数和总的头尾地址
 //void getOriginalDateHeadTail(RECORD *rp,RECORD *rpHeadZoom, RECORD *rpTailZoom){
@@ -342,130 +413,6 @@ int getTotalPeopleNumber(int n,int *peopleMax, int *peopleMin){
 	*peopleMax=max;
 	return max-min;
 }
-
-
-
-
-//日期横坐标  竖版排列print函数
-void printDateX(double sx, double sy, double dx, double dy,int dateNumber){
-	RECORD *temp=NULL;
-	double coordinateLabelY;
-	char dateChange[10][2];
-	int j,k;
-	double fontA;
-	
-	temp=rpHeadZoom;
-	fontA = GetFontAscent();
-	coordinateLabelY = coordinateY-coordinateHeight*0.05;
-
-	SetPenColor("Black");
-	//第一个点的横坐标日期
-	k=0;
-	while(temp->date[k]!='\0'){
-		dateChange[k][0]=temp->date[k];
-		dateChange[k][1]='\0';
-		drawLabel(sx, coordinateLabelY-k*fontA,dateChange[k]);
-		k++;
-	}
-	dateChange[k][0]='\0';
-	temp=temp->next;
-	//后面点的横坐标日期
-	for(j=1;j<dateNumber;j++){
-		//横坐标
-		//转换
-		k=0;
-		while(temp->date[k]!='\0'){
-			dateChange[k][0]=temp->date[k];
-			dateChange[k][1]='\0';
-			drawLabel(sx+dx*j, coordinateLabelY-k*fontA,dateChange[k]);
-			k++;
-		}
-		dateChange[k][0]='\0';
-	}
-}
-
-//折线+人数标明
-//参数rpHeadZoom起始日期对应结构地址，rpTailZoom结束日期对应结构地址,
-//sx,sy起笔点坐标，与轴有距离; dx,dy每个点横纵坐标变化标准间隔
-//i现在哪条线
-void drawFoldLine(double sx, double sy, double dx, double dy, int peopleMin, int peopleMax,int dateNumber, int i){
-	RECORD *temp=NULL;
-	double nowPointY, lastPointY;//当前点基准线以上delta值，上一个点基准线以上delta值
-	int j=0,k=0;
-	double fontA;
-	char num[10];
-	//double r=dx*0.05;//重点记号圈大小
-
-	fontA=GetFontAscent();
-	temp=rpHeadZoom;
-	nowPointY=(temp->number[i]-peopleMin)*dy;//基准线以上delta
-
-	//判断高亮/不高亮  笔触颜色
-	//颜色改变记得去peopleLabel函数也改掉
-	if(highLight[i][2]==0){
-		SetPenColor("Blue");
-	}
-	else if(highLight[i][2]==1){
-		SetPenColor("Red");
-	}
-	else{//报错黄色
-		SetPenColor("Yellow");
-	}
-	//drawLabel(sx, coordinateLabelY, temp->date);//横排版本第一个点的横坐标日期
-	
-	lastPointY=nowPointY;
-
-	//人数标注
-	peopleLabel(temp,dx, sx+dx*j, sy+nowPointY, peopleMin, peopleMax, i);
-	//下一个点
-	temp=temp->next;
-	
-	for(j=1;j<dateNumber;j++){
-		MovePen(sx+dx*(j-1),sy+nowPointY);
-		nowPointY=(temp->number[i]-peopleMin)*dy;
-		DrawLine(dx,nowPointY-lastPointY);
-		lastPointY=nowPointY;
-
-		////日期横坐标打印
-		//for(k=0;k<=7;k++){//日期打印8位,横排，首数字与点对齐
-		//	drawLabel(sx+dx*j, coordinateLabelY, temp->date);
-		//}
-
-		//人数标注
-		peopleLabel(temp,dx, sx+dx*j, sy+nowPointY, peopleMin, peopleMax,i);
-		//下一个点
-		temp=temp->next;
-	}
-
-	highLight[i][0]=sx+dx*(j-0.25);
-	highLight[i][1]=sy+nowPointY-fontA/2;
-	////尾端标值，需要对应改highLight[][0]=sx+dx*(j-0.25)
-	//drawLabel(sx+dx*(j-0.9),sy+nowPointY-fontA/2,itoa(rpTailZoom->number[i],num,10));
-	
-	//lineName(sx+dx*(j-0.75), sy+nowPointY,dx,i);
-
-}
-
-//判断是否继续放大
-int judgeZoomIn(){
-	int count=0;
-	RECORD *temp=NULL;
-	temp=rpHeadZoom;
-	while(temp->next != rpTailZoom){
-		count++;
-		temp=temp->next;
-		if(count>2){
-			break;
-		}
-	}
-	if (count <= 1){  //仅剩<=3个数据
-		return 0;
-	}
-	else{  //剩余>=4个数据
-		return 1;
-	}
-}
-
 
 
 //人数标注,peopleMin/peopleMax加画圈圈
@@ -548,52 +495,107 @@ void updateHighLight(int i,int n){
 }
 
 
-//放大调用
-void buttonZoomIn(){
-	if(judgeZoomIn()){//放大则头尾相反
-		rpHeadZoom=rpHeadZoom->next;
-		rpTailZoom=rpTailZoom->prior;
+
+
+//日期横坐标  竖版排列print函数
+void printDateX(double sx, double sy, double dx, double dy,int dateNumber){
+	RECORD *temp=NULL;
+	double coordinateLabelY;
+	char dateChange[10][2];
+	int j,k;
+	double fontA;
+	
+	temp=rpHeadZoom;
+	fontA = GetFontAscent();
+	coordinateLabelY = coordinateY-coordinateHeight*0.05;
+
+	SetPenColor("Black");
+	//第一个点的横坐标日期
+	k=0;
+	while(temp->date[k]!='\0'){
+		dateChange[k][0]=temp->date[k];
+		dateChange[k][1]='\0';
+		drawLabel(sx, coordinateLabelY-k*fontA,dateChange[k]);
+		k++;
 	}
-	else{
-		return;
+	dateChange[k][0]='\0';
+	temp=temp->next;
+	//后面点的横坐标日期
+	for(j=1;j<dateNumber;j++){
+		//横坐标
+		//转换
+		k=0;
+		while(temp->date[k]!='\0'){
+			dateChange[k][0]=temp->date[k];
+			dateChange[k][1]='\0';
+			drawLabel(sx+dx*j, coordinateLabelY-k*fontA,dateChange[k]);
+			k++;
+		}
+		dateChange[k][0]='\0';
 	}
 }
 
+//折线+横坐标日期+人数标明
+//参数rpHeadZoom起始日期对应结构地址，rpTailZoom结束日期对应结构地址,
+//sx,sy起笔点坐标，与轴有距离; dx,dy每个点横纵坐标变化标准间隔
+//i现在哪条线
+void drawFoldLine(double sx, double sy, double dx, double dy, int peopleMin, int peopleMax,int dateNumber, int i){
+	RECORD *temp=NULL;
+	double nowPointY, lastPointY;//当前点基准线以上delta值，上一个点基准线以上delta值
+	int j=0,k=0;
+	double fontA;
+	char num[10];
+	//double r=dx*0.05;//重点记号圈大小
 
+	fontA=GetFontAscent();
+	temp=rpHeadZoom;
+	nowPointY=(temp->number[i]-peopleMin)*dy;//基准线以上delta
 
-//缩小调用
-void buttonZoomOut(){
-	RECORD *temp;
-	if(rpHeadZoom->prior == NULL && rpTailZoom->next == NULL){//没有缩小余地，两端都到头
-		return;
+	//判断高亮/不高亮  笔触颜色
+	//颜色改变记得去peopleLabel函数也改掉
+	if(highLight[i][2]==0){
+		SetPenColor("Blue");
 	}
-	if(rpHeadZoom->prior!=NULL&&rpTailZoom->next!=NULL){//两端都没到头
-		rpHeadZoom=rpHeadZoom->prior;
-		rpTailZoom=rpTailZoom->next;
+	else if(highLight[i][2]==1){
+		SetPenColor("Red");
 	}
-	else if(rpHeadZoom->prior==NULL){//首到头，判断尾部
-		temp=rpTailZoom->next;
-		if(temp->next !=NULL){//尾端可以缩两个
-			rpTailZoom=temp->next;
-			return;
-		}
-		else{//尾端缩一个
-			rpTailZoom=temp;
-			return;
-		}
-	}//else if
-	else if(rpTailZoom->next == NULL){
-		temp=rpHeadZoom->prior;
-		if(temp->prior!=NULL){//头部可以缩两个
-			rpHeadZoom=temp->prior;
-			return;
-		}
-		else{//头部缩一个
-			rpHeadZoom=temp;
-			return;
-		}
-	}//else if
+	else{//报错黄色
+		SetPenColor("Yellow");
+	}
+	//drawLabel(sx, coordinateLabelY, temp->date);//横排版本第一个点的横坐标日期
+	
+	lastPointY=nowPointY;
+
+	//人数标注
+	peopleLabel(temp,dx, sx+dx*j, sy+nowPointY, peopleMin, peopleMax, i);
+	//下一个点
+	temp=temp->next;
+
+	for(j=1;j<dateNumber;j++){
+		MovePen(sx+dx*(j-1),sy+nowPointY);
+		nowPointY=(temp->number[i]-peopleMin)*dy;
+		DrawLine(dx,nowPointY-lastPointY);
+		lastPointY=nowPointY;
+
+		////日期横坐标打印
+		//for(k=0;k<=7;k++){//日期打印8位,横排，首数字与点对齐
+		//	drawLabel(sx+dx*j, coordinateLabelY, temp->date);
+		//}
+
+		//人数标注
+		peopleLabel(temp,dx, sx+dx*j, sy+nowPointY, peopleMin, peopleMax,i);
+		//下一个点
+		temp=temp->next;
+	}
+
+	highLight[i][0]=sx+dx*(j-0.25);
+	highLight[i][1]=sy+nowPointY-fontA/2;
+	////尾端标值，需要对应改highLight[][0]=sx+dx*(j-0.25)
+	//drawLabel(sx+dx*(j-0.9),sy+nowPointY-fontA/2,itoa(rpTailZoom->number[i],num,10));
+	
+	//lineName(sx+dx*(j-0.75), sy+nowPointY,dx,i);
 }
+
 //预测链表与原链表的连接
 void connnect(RECORD *rp, RECORD *futurep){
 	rp->next=futurep;
@@ -719,7 +721,7 @@ void buttonCustomize(int day1,int month1,int year1,int day2,int month2, int year
 void addEditButton(int a,int b,void(*p)(),char *str){     //button位置（a,b）a列数(横坐标)，b行数（纵坐标），*p为按钮触发的函数
 	static double editW;						//编辑区宽度
 	static double editX = 8;					//编辑区button首位置x
-	static double editY = 6;					//编辑区button首位置y
+	static double editY = 3;					//编辑区button首位置y
 	static double editScaleX = 6;					//编辑区button宽度间距之比
 	static double editScaleY = 6;					//编辑区button高度间距之比
 	static double a0 = 4;						//编辑区一行button总个数
@@ -731,6 +733,9 @@ void addEditButton(int a,int b,void(*p)(),char *str){     //button位置（a,b）a列
 	double sw = w/editScaleX;						//编辑区button左右间隔
 	editW=0.75*winWidth;
 	w= editW/(a0*(1+1/editScaleX));
+
+	if(globalEdit==0)SetPenColor("Gray");
+
 	if (button(GenUIID(a*10+b), editX+(a-1)*w+(a-1)*sw, editY+b*h+(b-1)*sh, w, h, str))
 		p();//此处填写函数
 }
@@ -754,20 +759,135 @@ void addViewButton(int a,int b,void(*p)(),char *str){     //button位置（a,b）a列
 		p();//此处填写函数
 }
 
+void drawMenu()
+{   
+	static char * menuListFile[] = {"文件",  
+		"打开  | Ctrl-O", // 快捷键必须采用[Ctrl-X]格式，放在字符串的结尾
+		"保存",
+		"关闭",
+		"Exit   | Ctrl-E"};
+	static char * menuListEdit[] = {"编辑",
+		"开启",
+		"关闭 | Ctrl-T"};
+	static char * menuListHelp[] = {"帮助",
+		"Use  | Ctrl-M",
+		"About"};
+	static char * selectedLabel = NULL;
+	double fH = GetFontHeight();
+	double x = 0;//fH/8;
+	double y = winHeight;
+	double h = fH*1.5; // 控件高度
+	double w = TextStringWidth(menuListHelp[0])*2; // 控件宽度
+	double wlist = TextStringWidth(menuListEdit[2])*1.2;
+	double xindent = winHeight/20; // 缩进
+	int    selection;
+	char *p;
+	// menu bar
+	drawMenuBar(0,y-h,winWidth,h);
+	// File 菜单
+	selection = menuList(GenUIID(0), x, y-h, w, wlist, h, menuListFile, sizeof(menuListFile)/sizeof(menuListFile[0]));
+    if( selection==1 ) {  p="test.txt";
+	               OpenFiles(p); }
+	if( selection==2 )
+	if( selection==4 )
+		exit(-1); // choose to exit
+	
+	// Edit 菜单
+	selection = menuList(GenUIID(0),x+w,  y-h, w, wlist,h, menuListEdit,sizeof(menuListEdit)/sizeof(menuListEdit[0]));
+	if( selection==1 ) globalEdit=1;
+	if(selection==2)globalEdit=0;
+
+	
+	// Help 菜单
+	
+	selection = menuList(GenUIID(0),x+2*w,y-h, w, wlist, h, menuListHelp,sizeof(menuListHelp)/sizeof(menuListHelp[0]));
+    
+	//Status(statusNumber);
+	}
 void drawButtons(){	
 			
 	addViewButton(1,1,buttonZoomIn,"放大");
 	addViewButton(2,1,buttonZoomOut,"缩小");
-	addViewButton(3,1,err,"适应屏幕");
+	addViewButton(3,1,try0,"实验");
 	addViewButton(4,1,err,"备用");
-	addViewButton(1,2,err,"左移到头");
-	addViewButton(2,2,err,"左移");
-	addViewButton(3,2,err,"右移");
-	addViewButton(4,2,err,"右移到头");
-	addEditButton(1,5,editOnOff,"编辑模式");
-	addEditButton(1,4,err,"新建日期");
-	addEditButton(1,3,err,"删除最后日期");
+	addViewButton(1,2,buttonLeftest,"左移到头");
+	addViewButton(2,2,buttonLeft,"左移");
+	addViewButton(3,2,buttonRight,"右移");
+	addViewButton(4,2,buttonRightest,"右移到头");
+	addEditButton(1,8,editOnOff,globalEdit?"编辑模式:ON":"编辑模式:OFF");
+	addEditButton(1,7,editNewDate,"新建日期");
+	addEditButton(1,6,editDeleteLastDate,"删除最后日期");
+	addEditButton(1,5,editChangeData,"修改参数");
+	addEditButton(1,4,editNewLine,"新增线");
+	addEditButton(1,3,editDeleteLine,"删除线");
 	addEditButton(1,2,err,"预测");
 	addEditButton(1,1,err,"更改预测模式");
 	
+}
+
+void drawPrompt1(){
+	double x=winWidth/2;
+	double y=winHeight/2;
+	double fH = GetFontHeight();
+	double h = fH*1.5; // 控件高度
+	SetPenColor("White");
+	drawRectangle(x-1.5,y-1,4,2,1);
+	SetPenColor("Black");
+	drawRectangle(x-1.5,y-1,4,2,0);
+	drawLabel(x-2+2*fH+1.5,y-2+fH+2.5,"尚未保存，确认退出？");
+	if (button(GenUIID(0), x-2+2*fH+1,y-2+fH+1, 1, h, "确定")) exit(-1);
+	if (button(GenUIID(1), x-2+2*fH+2.5,y-2+fH+1, 1, h, "取消"))globalActive=0;
+}
+
+void drawPrompt2(){
+	double x=winWidth/2;
+	double y=winHeight/2;
+	double fH = GetFontHeight();
+	double h = fH*1.5; // 控件高度
+	SetPenColor("White");
+	drawRectangle(x-1.5,y-1,4,2,1);
+	SetPenColor("Black");
+	drawRectangle(x-1.5,y-1,4,2,0);
+	drawLabel(x-1,y-2+fH+2.5,"温馨提示：本程序无撤销功能，");
+	drawLabel(x-0.5,y+0.5,"是否要进行当前操作？");
+	if (button(GenUIID(0), x-2+2*fH+1,y-2+fH+1, 1, h, "是")){
+		if(popStatus2=0);
+		else if(popStatus2=1);
+	}
+	if (button(GenUIID(1), x-2+2*fH+2.5,y-2+fH+1, 1, h, "否"))globalActive=0;
+}
+
+void drawInputBox(){
+	double x=winWidth/2;
+	double y=winHeight/2;
+	double fH = GetFontHeight();
+	double h = fH*1.5; // 控件高度
+	SetPenColor("White");
+	drawRectangle(x-1.5,y-1,4,2,1);
+	SetPenColor("Black");
+	drawRectangle(x-1.5,y-1,4,2,0);
+	drawLabel(x-2+2*fH+1.5,y-2+fH+2.5,popInputTip);
+	if (button(GenUIID(0), x-2+2*fH+1,y-2+fH+1, 1, h, "确定")){
+	
+	}
+	if (button(GenUIID(1), x-2+2*fH+2.5,y-2+fH+1, 1, h, "取消"))globalActive=0;
+	if( textbox(GenUIID(0), x, y, 2, h, popInput, sizeof(popInput) ) )
+	;
+}
+	//{	double v = 0;
+	//	sscanf(popInput, "%lf", &v);
+	//	return v;
+	//}
+
+void drawTipBox(){
+	double x=winWidth/2;
+	double y=winHeight/2;
+	double fH = GetFontHeight();
+	double h = fH*1.5; // 控件高度
+	SetPenColor("White");
+	drawRectangle(x-1.5,y-1,4,2,1);
+	SetPenColor("Black");
+	drawRectangle(x-1.5,y-1,4,2,0);
+	drawLabel(x+2*fH-1,y-2+fH+2.5,popTip);
+	if (button(GenUIID(0), x+2*fH-0.5,y-2+fH+1, 1, h, "确定")) globalActive=0;
 }

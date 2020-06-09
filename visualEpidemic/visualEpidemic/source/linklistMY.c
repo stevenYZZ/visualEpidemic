@@ -69,8 +69,6 @@ KEY* newLinkKEY(){
 		head->next=NULL;
 		return head;
 	}
-	
-	
 }
 //向KEY链表尾部增加一个结点
 void addLinkKEY(KEY** tail,char *namex){
@@ -83,7 +81,6 @@ void addLinkKEY(KEY** tail,char *namex){
 		(*tail)->next=p;
 		*tail=p;
 	}
-	
 }
 
 //在KEY链表尾部删除一个节点

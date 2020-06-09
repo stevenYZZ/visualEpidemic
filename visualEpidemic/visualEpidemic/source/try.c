@@ -30,32 +30,28 @@
 //全局变量
 
 
-
-void DisplayClear(void); 
-void startTimer(int id,int timeinterval);
-void display(void); 
-void addEditButton(int a,int b,void(*p)(),char *str);
-
 //新增函数
 
-
-void write(char *s){
-	sprintf_s(s,100,"%d",globalEdit);
-	if( button(GenUIID(0), 3.5, 3.5, 2, 1, s) ){
-		
-	}
-}
-
-void winchange(){
-	winWidth = 6;
-}
+//
+//void write(char *s){
+//	sprintf_s(s,100,"%d",globalEdit);
+//	if( button(GenUIID(0), 3.5, 3.5, 2, 1, s) ){
+//		
+//	}
+//}
+//
+//void winchange(){
+//	winWidth = 6;
+//}
 
 //可视化模块
 
 //链表模块
 
+
+//事件响应函数
 void MouseEventProcess(int x, int y, int button, int event)
-{	
+{
 	double mx, my;
 	static double omx=0,omy=0;
 	int i,moveTimes=0;
@@ -113,15 +109,23 @@ void MouseEventProcess(int x, int y, int button, int event)
 	uiGetMouse(x,y,button,event); //GUI获取鼠标
 	display(); // 刷新显示
 }
+void CharEventProcess(char ch)
+{
+	uiGetChar(ch); // GUI字符输入
+	display(); //刷新显示
+}
 
-
+void KeyboardEventProcess(int key, int event)
+{
+	uiGetKeyboard(key,event); // GUI获取键盘
+	display(); // 刷新显示
+}
 
 void Main() 
 {
 
 	RECORD *temp=NULL;
 	int i, n;
-
 
 	//录入数据
 	//RECORD
@@ -130,12 +134,13 @@ void Main()
 	char datex[10]="20200101";
 	char name[4][10]={"first","second","third"};
 	int num[10];
+
 	rpHead=newLinkRECORD();
 	rp=rpHead;
 	strcpy(rpHead->date,datex);
 	rpHead->number[0]=1;
 	rpHead->number[1]=2;
-	rpHead->number[2]=4;
+	rpHead->number[2]=3;
 	rpTail=rpHead;
 	for(i=0;i<=30;i++){
 		num[0]=1;
@@ -153,6 +158,12 @@ void Main()
 	kpTail=kpHead;
 	addLinkKEY(&kpTail,name[1]);
 	addLinkKEY(&kpTail,name[2]);
+	//addLinkKEY(kpTail,name[2]);
+	writeLinkRECORD(searchLinkRECORD(rpHead,"20200101"),getFieldNum(kpHead),10);
+
+
+	//录入结束
+
 
 
 	//可视化模块开始
@@ -173,57 +184,10 @@ void Main()
 		highLight[i][2]=0;
 	}
 
-
-
-	//一开始没有display();的话，运行后鼠标不划到界面内就没有显示
-	display();
-
+	// 注册事件响应函数
+	registerCharEvent(CharEventProcess);        // 字符
+	registerKeyboardEvent(KeyboardEventProcess);// 键盘
 	registerMouseEvent(MouseEventProcess);      // 鼠标
-//########################################################################################################
-
-	
-
-	
+	display();
 }
-
-
-
-//void Trydraw(){
-//	char s[100];
-//	char s1[100];
-//	char s2[100];
-//	char t[8][100];
-//	double num0 = 10;
-//	int i;
-//	RECORD *p = activeRECORD;
-//	num0=winWidth;
-//	num0=0.75*winWidth/(4*(1+1/6));
-//	//sprintf_s(s1,100,"global=%d", globalEdit);
-//	sprintf_s(s,100,"20200128");
-//	sprintf_s(s1,100,"20200204");
-//
-//	activeRECORD = recordCreat(s,s1,3);
-//	for(i=0;i<=2;i++){
-//		sprintf_s(t[i],400,"d=%s %d %d %d",p->date,p->number[0],p->number[1],p->number[2]);
-//	}
-//
-//	if( button(GenUIID(0), 4, 4, 2, 1, s2) ){
-//		write(s);
-//	}
-//
-//	/*
-//	addViewButton(1,3,err,t[5]);
-//	addViewButton(2,3,err,t[6]);
-//	addViewButton(3,3,err,t[7]);
-//	addViewButton(4,3,err,t[8]);
-//	addViewButton(1,4,err,t[1]);
-//	addViewButton(2,4,err,t[2]);
-//	addViewButton(3,4,err,t[3]);
-//	addViewButton(4,4,err,t[4]);
-//	*/
-//}
-
-
-
-
-
+//########################################################################################################	

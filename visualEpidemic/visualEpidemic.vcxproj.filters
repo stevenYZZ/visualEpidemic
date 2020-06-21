@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="lib&amp;GUI">
+      <UniqueIdentifier>{914b127f-4b1e-4de6-95c6-e4017932b695}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\libgraphics\exceptio.c">
+      <Filter>lib&amp;GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libgraphics\genlib.c">
+      <Filter>lib&amp;GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libgraphics\graphics.c">
+      <Filter>lib&amp;GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libgraphics\random.c">
+      <Filter>lib&amp;GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libgraphics\simpio.c">
+      <Filter>lib&amp;GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libgraphics\strlib.c">
+      <Filter>lib&amp;GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\simpleGUI\imgui.c">
+      <Filter>lib&amp;GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\common.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\edit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\files.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\predict.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\visualization.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\TRY.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\linklistMY.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\libgraphics\boolean.h">
+      <Filter>lib&amp;GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libgraphics\exception.h">
+      <Filter>lib&amp;GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libgraphics\extgraph.h">
+      <Filter>lib&amp;GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libgraphics\gcalloc.h">
+      <Filter>lib&amp;GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libgraphics\genlib.h">
+      <Filter>lib&amp;GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libgraphics\graphics.h">
+      <Filter>lib&amp;GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libgraphics\random.h">
+      <Filter>lib&amp;GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libgraphics\simpio.h">
+      <Filter>lib&amp;GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libgraphics\strlib.h">
+      <Filter>lib&amp;GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\simpleGUI\imgui.h">
+      <Filter>lib&amp;GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\common.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\edit.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\files.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\predict.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\visualization.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\linklistMY.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
